@@ -22,7 +22,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->middleware('auth:sanctum', config('jetstream.auth_session'));
 
 Route::middleware([
     'auth:sanctum',

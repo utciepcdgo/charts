@@ -37,10 +37,7 @@ class MaterialSuppliedChart
             ->get()->count();
 
         return $this->chart->donutChart()
-            ->setTitle('Paquetes entregados a CAEs.')
             ->addData([$material_x, ($paquetes_x - $material_x)])
-            ->setLabels(['Material entregado', 'Material por entregar'])
-            ->setColors(['#FFC107', '#B0BEC5'])
             ->toVue();
     }
 }
