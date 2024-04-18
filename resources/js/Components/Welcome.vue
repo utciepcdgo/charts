@@ -3,8 +3,7 @@ import RadialProgress, {StrokeLinecap} from "vue3-radial-progress";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import ApexCharts from "vue3-apexcharts";
 import {usePage} from "@inertiajs/vue3";
-import type {PropType} from 'vue'
-import {toRefs} from "vue";
+import {PropType, toRef} from 'vue'
 import {ApexOptions} from "apexcharts";
 
 
@@ -14,6 +13,7 @@ interface Chart extends ApexCharts {
 }
 
 export default {
+    emits: ['update:chartDataRo'],
     components: {
         PrimaryButton,
         RadialProgress,
@@ -26,9 +26,12 @@ export default {
         // ETAPA CÓMPUTOS
         x_chart_collated_packets_dgo: ApexCharts as PropType<Chart>,
         x_chart_recount_packets_dgo: ApexCharts as PropType<Chart>,
+        chartData: Array<any>
     },
-    setup(props) {
-        return props
+    setup(props, {emit}) {
+        const chartDataRo = toRef(props, 'chartData');
+        const updateChartData = (data) => emit('update:chartDataRo', data);
+        // return {props}
     },
     data() {
         return {
@@ -44,11 +47,13 @@ export default {
             timingFunc: "linear",
             isClockwise: true,
             animateSpeed: 1000,
+            chart_data: [],
             // GRAFICA AVANCE DE PAQUETES
             chart_packages_dgo: {
                 id: 1,
                 series: usePage().props.x_chart_packets_received_dgo.series,
                 options: {
+                    colors: ['#5e5e5e', '#680bf8'],
                     title: {
                         text: "Material entregado a los CAE",
                         align: 'left',
@@ -76,6 +81,7 @@ export default {
                 id: 2,
                 series: usePage().props.x_chart_packets_received_dgo.series,
                 options: {
+                    colors: ['#5e5e5e', '#680bf8'],
                     title: {
                         text: "Paquetes Recibidos",
                         align: 'left',
@@ -103,6 +109,7 @@ export default {
                 id: 3,
                 series: usePage().props.x_chart_aec_registration_dgo.series,
                 options: {
+                    colors: ['#5e5e5e', '#680bf8'],
                     title: {
                         text: "AEC Registradas",
                         align: 'left',
@@ -130,6 +137,7 @@ export default {
                 id: 4,
                 series: usePage().props.x_chart_collated_packets_dgo.series,
                 options: {
+                    colors: ['#5e5e5e', '#680bf8'],
                     title: {
                         text: "Paquetes Cotejo",
                         align: 'left',
@@ -162,6 +170,7 @@ export default {
                 id: 5,
                 series: usePage().props.x_chart_recount_packets_dgo.series,
                 options: {
+                    colors: ['#5e5e5e', '#680bf8'],
                     title: {
                         text: "Paquetes Recuento",
                         align: 'left',
@@ -191,6 +200,42 @@ export default {
             },
         }
     },
+    // REALTIME DATA
+    mounted() {
+        this.listenForPacketsReceived();
+        console.log('Series: ', this.chart_packets_received_dgo.series)
+
+    },
+    methods: {
+        listenForPacketsReceived() {
+            window.Echo.channel('packets-received-dgo')
+                .listen('PacketsReceivedEvent', e => {
+                    // console.log(e.data.received)
+                    this.chartData = e?.data?.received;
+                });
+        },
+        // window.Echo.channel('packages')
+        //     .listen('PackageEvent', (e) => {
+        //         this.chart_packages_dgo.series = e.data;
+        //     });
+        // window.Echo.channel('packets-received-dgo')
+        //     .listen('PacketReceivedEvent', (e) => {
+        //         console.log(e.data)
+        //         // this.chart_packets_received_dgo.series = e.data;
+        //     });
+        // window.Echo.channel('packages')
+        //     .listen('AecRegistrationEvent', (e) => {
+        //         this.chart_aec_registration_dgo.series = e.data;
+        //     });
+        // window.Echo.channel('packages')
+        //     .listen('CollatedPacketEvent', (e) => {
+        //         this.chart_collated_packets_dgo.series = e.data;
+        //     });
+        // window.Echo.channel('packages')
+        //     .listen('RecountPacketEvent', (e) => {
+        //         this.chart_recount_packets_dgo.series = e.data;
+        //     });
+    },
 }
 
 
@@ -216,6 +261,7 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
         <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
 
             <div>
+                {{ chartData }}
                 <apexchart width="500" type="donut" :options="chart_packages_dgo.options"
                            :series="chart_packages_dgo.series" :key="chart_packages_dgo.id"></apexchart>
             </div>
@@ -230,28 +276,28 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
                            :series="chart_aec_registration_dgo.series" :key="chart_aec_registration_dgo.id"></apexchart>
             </div>
 
-<!--            <div class="flex justify-center items-center">
-                <RadialProgress
-                    :diameter="diameter"
-                    :total-steps="totalSteps"
-                    :completed-steps="completedSteps"
-                    :animate-speed="animateSpeed"
-                    :stroke-width="strokeWidth"
-                    :inner-stroke-width="innerStrokeWidth"
-                    :stroke-linecap="strokeLinecap"
-                    :start-color="startColor"
-                    :stop-color="stopColor"
-                    :inner-stroke-color="innerStrokeColor"
-                    :timing-func="timingFunc"
-                    :is-clockwise="isClockwise"
-                >
-                    {{ completedSteps }}/{{ totalSteps }}
-                    <p class="text-sm">Avance</p>
-                </RadialProgress>
-                <PrimaryButton class="mt-4" :disabled="completedSteps >= totalSteps"
-                               @click.prevent="completedSteps++">Actualizar
-                </PrimaryButton>
-            </div>-->
+            <!--            <div class="flex justify-center items-center">
+                            <RadialProgress
+                                :diameter="diameter"
+                                :total-steps="totalSteps"
+                                :completed-steps="completedSteps"
+                                :animate-speed="animateSpeed"
+                                :stroke-width="strokeWidth"
+                                :inner-stroke-width="innerStrokeWidth"
+                                :stroke-linecap="strokeLinecap"
+                                :start-color="startColor"
+                                :stop-color="stopColor"
+                                :inner-stroke-color="innerStrokeColor"
+                                :timing-func="timingFunc"
+                                :is-clockwise="isClockwise"
+                            >
+                                {{ completedSteps }}/{{ totalSteps }}
+                                <p class="text-sm">Avance</p>
+                            </RadialProgress>
+                            <PrimaryButton class="mt-4" :disabled="completedSteps >= totalSteps"
+                                           @click.prevent="completedSteps++">Actualizar
+                            </PrimaryButton>
+                        </div>-->
         </div>
 
         <div class="p-6 lg:p-8 bg-white border-b border-gray-200">

@@ -20,6 +20,8 @@
     },
     "dependencies": {
         "apexcharts": "^3.48.0",
+        "laravel-echo": "^1.16.1",
+        "pusher-js": "^8.4.0-rc2",
         "vue3-apexcharts": "^1.5.2",
         "vue3-radial-progress": "^1.1.1"
     }
