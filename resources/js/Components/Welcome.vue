@@ -53,42 +53,51 @@ export default {
                 id: 1,
                 series: usePage().props.x_chart_packets_received_dgo.series,
                 options: {
-                    colors: ['#5e5e5e', '#680bf8'],
+                    stroke: {
+                        show: false
+                    },
+                    legend: {
+                        show: false
+                    },
+                    colors: ['#CFD8DC', '#680bf8'],
                     title: {
                         text: "Documentación y Material",
                         align: 'left',
                         margin: 10,
                     },
                     subtitle: {
-                        text: "Entregados a los CAE",
+                        text: "Entregado a los CAE",
                         align: 'left',
                         margin: 0,
+                    },
+                    dataLabels: { // Etiquetas de datos dentro de la gráfica
+                        enabled: false,
                     },
                     labels: ['Pendiente', 'Entregado'],
                     plotOptions: {
                         pie: {
                             startAngle: -90,
                             endAngle: 90,
+                            customScale: 0.9,
                             donut: {
                                 size: '80%',
                                 labels: {
                                     show: true,
                                     total: {
+                                        label: 'Entregado/Pendientes',
                                         show: true,
-                                        showAlways: true,
-                                        formatter:function(w) {
+                                        showAlways: false,
+                                        color: '#37474F',
+                                        formatter: function (w) {
                                             return w.globals.seriesTotals.reduce((a, b) => {
-                                                return a + b
-                                            }, 0)
+                                                return (b + " de " + (a + b))
+                                            })
                                         }
                                     }
                                 }
                             },
                             expandOnClick: false
                         }
-                    },
-                    dataLabels: {
-                        enabled: false
                     },
                 },
             },
@@ -97,6 +106,9 @@ export default {
                 id: 2,
                 series: usePage().props.x_chart_packets_received_dgo.series,
                 options: {
+                    legend: {
+                        show: false
+                    },
                     colors: ['#5e5e5e', '#680bf8'],
                     title: {
                         text: "Paquetes Recibidos",
@@ -108,6 +120,7 @@ export default {
                         pie: {
                             startAngle: -90,
                             endAngle: 90,
+                            customScale: 0.9,
                             donut: {
                                 size: '80%',
                                 labels: {
@@ -115,10 +128,10 @@ export default {
                                     total: {
                                         show: true,
                                         showAlways: true,
-                                        formatter:function(w) {
+                                        formatter: function (w) {
                                             return w.globals.seriesTotals.reduce((a, b) => {
-                                                return a + b
-                                            }, 0)
+                                                return (b + " de " + a)
+                                            })
                                         }
                                     }
                                 }
@@ -136,6 +149,9 @@ export default {
                 id: 3,
                 series: usePage().props.x_chart_aec_registration_dgo.series,
                 options: {
+                    legend: {
+                        show: false
+                    },
                     colors: ['#5e5e5e', '#680bf8'],
                     title: {
                         text: "AEC Registradas",
@@ -147,6 +163,7 @@ export default {
                         pie: {
                             startAngle: -90,
                             endAngle: 90,
+                            customScale: 0.9,
                             donut: {
                                 size: '80%',
                                 labels: {
@@ -154,10 +171,10 @@ export default {
                                     total: {
                                         show: true,
                                         showAlways: true,
-                                        formatter:function(w) {
+                                        formatter: function (w) {
                                             return w.globals.seriesTotals.reduce((a, b) => {
-                                                return a + b
-                                            }, 0)
+                                                return (b + " de " + a)
+                                            })
                                         }
                                     }
                                 }
@@ -296,7 +313,7 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
 
         </div>
 
-        <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 p-6 lg:p-8">
+        <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
 
             <div>
                 {{ chartData }}
