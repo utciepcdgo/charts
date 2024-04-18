@@ -55,24 +55,40 @@ export default {
                 options: {
                     colors: ['#5e5e5e', '#680bf8'],
                     title: {
-                        text: "Material entregado a los CAE",
+                        text: "Documentación y Material",
                         align: 'left',
                         margin: 10,
+                    },
+                    subtitle: {
+                        text: "Entregados a los CAE",
+                        align: 'left',
+                        margin: 0,
                     },
                     labels: ['Pendiente', 'Entregado'],
                     plotOptions: {
                         pie: {
+                            startAngle: -90,
+                            endAngle: 90,
                             donut: {
                                 size: '80%',
                                 labels: {
                                     show: true,
+                                    total: {
+                                        show: true,
+                                        showAlways: true,
+                                        formatter:function(w) {
+                                            return w.globals.seriesTotals.reduce((a, b) => {
+                                                return a + b
+                                            }, 0)
+                                        }
+                                    }
                                 }
                             },
                             expandOnClick: false
                         }
                     },
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     },
                 },
             },
@@ -90,17 +106,28 @@ export default {
                     labels: ['Pendiente', 'Recibidos'],
                     plotOptions: {
                         pie: {
+                            startAngle: -90,
+                            endAngle: 90,
                             donut: {
                                 size: '80%',
                                 labels: {
                                     show: true,
+                                    total: {
+                                        show: true,
+                                        showAlways: true,
+                                        formatter:function(w) {
+                                            return w.globals.seriesTotals.reduce((a, b) => {
+                                                return a + b
+                                            }, 0)
+                                        }
+                                    }
                                 }
                             },
                             expandOnClick: false
                         }
                     },
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     },
                 },
             },
@@ -118,17 +145,28 @@ export default {
                     labels: ['Pendiente', 'Registradas'],
                     plotOptions: {
                         pie: {
+                            startAngle: -90,
+                            endAngle: 90,
                             donut: {
                                 size: '80%',
                                 labels: {
                                     show: true,
+                                    total: {
+                                        show: true,
+                                        showAlways: true,
+                                        formatter:function(w) {
+                                            return w.globals.seriesTotals.reduce((a, b) => {
+                                                return a + b
+                                            }, 0)
+                                        }
+                                    }
                                 }
                             },
                             expandOnClick: false
                         }
                     },
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     },
                 },
             },
@@ -258,7 +296,7 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
 
         </div>
 
-        <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
+        <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 p-6 lg:p-8">
 
             <div>
                 {{ chartData }}
