@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class PacketsReceivedEvent implements ShouldBroadcastNow
+class PacketsReceivedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -48,7 +48,7 @@ class PacketsReceivedEvent implements ShouldBroadcastNow
         ];
     }
 
-    public function broadcastOn()
+    public function broadcastOn(): Channel
     {
         return new Channel('packets-received-dgo');
     }

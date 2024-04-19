@@ -1,6 +1,5 @@
 <script lang="ts">
 import RadialProgress, {StrokeLinecap} from "vue3-radial-progress";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import ApexCharts from "vue3-apexcharts";
 import {usePage} from "@inertiajs/vue3";
 import {PropType, toRef} from 'vue'
@@ -13,9 +12,7 @@ interface Chart extends ApexCharts {
 }
 
 export default {
-    emits: ['update:chartDataRo'],
     components: {
-        PrimaryButton,
         RadialProgress,
         ApexCharts
     },
@@ -29,9 +26,7 @@ export default {
         chartData: Array<any>
     },
     setup(props, {emit}) {
-        const chartDataRo = toRef(props, 'chartData');
-        const updateChartData = (data) => emit('update:chartDataRo', data);
-        // return {props}
+        return {props}
     },
     data() {
         return {
@@ -48,6 +43,7 @@ export default {
             isClockwise: true,
             animateSpeed: 1000,
             chart_data: [],
+
             // GRAFICA AVANCE DE PAQUETES
             chart_packages_dgo: {
                 id: 1,
@@ -253,6 +249,72 @@ export default {
                     }
                 },
             },
+            // TEST
+            chart_test_dgo: {
+                id: 6,
+                series: [1],
+                options: {
+                    colors: ['#6200EA'],
+                    chart: {
+                        width: '10%',
+                        type: 'radialBar',
+                    },
+                    plotOptions: {
+                        radialBar: {
+                            hollow: {
+                                margin: 0,
+                                size: '70%',
+                                background: '#fff',
+                                image: undefined,
+                                imageOffsetX: 0,
+                                imageOffsetY: 0,
+                                position: 'front',
+                            },
+                            track: {
+                                background: '#EDE7F6',
+                                strokeWidth: '70%',
+                                margin: 0, // margin is in pixels
+                            },
+
+                            dataLabels: {
+                                show: true,
+                                name: {
+                                    offsetY: -5,
+                                    show: true,
+                                    color: '#888',
+                                    fontSize: '12px'
+                                },
+                                value: {
+                                    formatter: function (val) {
+                                        return val + "%";
+                                    },
+                                    offsetY: 0,
+                                    color: '#111',
+                                    fontSize: '16px',
+                                    show: true,
+                                }
+                            }
+                        }
+                    },
+                    fill: {
+                        type: 'solid',
+                        gradient: {
+                            shade: 'dark',
+                            type: 'horizontal',
+                            shadeIntensity: 0.5,
+                            //gradientToColors: ['#680bf8'],
+                            inverseColors: true,
+                            opacityFrom: 1,
+                            opacityTo: 1,
+                            stops: [0, 100]
+                        }
+                    },
+                    stroke: {
+                        lineCap: 'round'
+                    },
+                    labels: ['Avance'],
+                },
+            },
         }
     },
     // REALTIME DATA
@@ -266,7 +328,7 @@ export default {
             window.Echo.channel('packets-received-dgo')
                 .listen('PacketsReceivedEvent', e => {
                     // console.log(e.data.received)
-                    this.chartData = e?.data?.received;
+                    this.chart_packages_dgo.series = e.data;
                 });
         },
         // window.Echo.channel('packages')
@@ -298,6 +360,33 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
 </script>
 
 <template>
+
+    <div class="flex gap-4 p-8">
+        <div class="flex justify-start items-center border border-gray-200 px-8 py-2 rounded">
+            <apexchart type="radialBar" :options="chart_test_dgo.options"
+                       :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+            <div>
+                <p class="font-bold text-gray-500">Entrega de Material</p>
+                <p class="font-medium text-gray-400">233 de 599</p>
+            </div>
+        </div>
+        <div class="flex justify-start items-center border border-gray-200 px-8 py-2 rounded">
+            <apexchart width="180" type="radialBar" :options="chart_test_dgo.options"
+                       :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+            <div>
+                <p class="font-bold text-gray-500">Entrega de Material</p>
+                <p class="font-medium text-gray-400">233 de 599</p>
+            </div>
+        </div>
+        <div class="flex justify-start items-center border border-gray-200 px-8 py-2 rounded">
+            <apexchart width="180" type="radialBar" :options="chart_test_dgo.options"
+                       :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+            <div>
+                <p class="font-bold text-gray-500 text-sm">Entrega de Material</p>
+                <p class="font-medium text-gray-400 text-xs">233 de 599</p>
+            </div>
+        </div>
+    </div>
     <div>
         <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
             <!--            <ApplicationLogo class="block h-12 w-auto"/>-->
