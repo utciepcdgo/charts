@@ -1,8 +1,7 @@
 <script lang="ts">
-import RadialProgress, {StrokeLinecap} from "vue3-radial-progress";
 import ApexCharts from "vue3-apexcharts";
 import {usePage} from "@inertiajs/vue3";
-import {PropType, toRef} from 'vue'
+import {computed, PropType, ref, toRef, toRefs} from 'vue'
 import {ApexOptions} from "apexcharts";
 
 
@@ -13,7 +12,6 @@ interface Chart extends ApexCharts {
 
 export default {
     components: {
-        RadialProgress,
         ApexCharts
     },
     props: {
@@ -23,27 +21,17 @@ export default {
         // ETAPA CÓMPUTOS
         x_chart_collated_packets_dgo: ApexCharts as PropType<Chart>,
         x_chart_recount_packets_dgo: ApexCharts as PropType<Chart>,
-        chartData: Array<any>
     },
     setup(props, {emit}) {
-        return {props}
+        const c = ref(usePage().props.x_chart_packets_received_dgo.series)
+        return {
+            props,
+            toFixed,
+            c
+        }
     },
     data() {
         return {
-            completedSteps: 2,
-            totalSteps: 6,
-            diameter: 320,
-            strokeWidth: 10,
-            innerStrokeWidth: 20,
-            strokeLinecap: "round" as StrokeLinecap,
-            startColor: "#0071ff",
-            stopColor: "#ea00f6",
-            innerStrokeColor: '#ECEFF1',
-            timingFunc: "linear",
-            isClockwise: true,
-            animateSpeed: 1000,
-            chart_data: [],
-
             // GRAFICA AVANCE DE PAQUETES
             chart_packages_dgo: {
                 id: 1,
@@ -70,6 +58,9 @@ export default {
                         enabled: false,
                     },
                     labels: ['Pendiente', 'Entregado'],
+                    tooltip: {
+                        enabled: false
+                    },
                     plotOptions: {
                         pie: {
                             startAngle: -90,
@@ -79,6 +70,14 @@ export default {
                                 size: '80%',
                                 labels: {
                                     show: true,
+                                    name: {
+                                        show: true,
+                                        fontSize: '22px',
+                                        fontFamily: 'Helvetica, Arial, sans-serif',
+                                        fontWeight: 600,
+                                        color: '#37474F',
+                                        offsetY: -10,
+                                    },
                                     total: {
                                         label: 'Entregado/Pendientes',
                                         show: true,
@@ -86,7 +85,7 @@ export default {
                                         color: '#37474F',
                                         formatter: function (w) {
                                             return w.globals.seriesTotals.reduce((a, b) => {
-                                                return (b + " de " + (a + b))
+                                                return (b + " de " + (a - b))
                                             })
                                         }
                                     }
@@ -252,11 +251,10 @@ export default {
             // TEST
             chart_test_dgo: {
                 id: 6,
-                series: [1],
+                series: [toFixed((this.c[1] / this.c[0] * 100), 2)],
                 options: {
                     colors: ['#6200EA'],
                     chart: {
-                        width: '10%',
                         type: 'radialBar',
                     },
                     plotOptions: {
@@ -320,15 +318,17 @@ export default {
     // REALTIME DATA
     mounted() {
         this.listenForPacketsReceived();
-        console.log('Series: ', this.chart_packets_received_dgo.series)
-
     },
     methods: {
         listenForPacketsReceived() {
             window.Echo.channel('packets-received-dgo')
                 .listen('PacketsReceivedEvent', e => {
-                    // console.log(e.data.received)
-                    this.chart_packages_dgo.series = e.data;
+                    // Update series just if the received data is different from the current series
+                    if (this.$refs.chart_packages_dgo.series !== e.received) {
+                        this.c = e.received;
+                        this.$refs.cpr.updateSeries([toFixed((e.received[1] / e.received[0] * 100), 2)], true);
+                        this.$refs.chart_packages_dgo.updateSeries(e.received, true);
+                    }
                 });
         },
         // window.Echo.channel('packages')
@@ -354,34 +354,52 @@ export default {
         //     });
     },
 }
-
-
 const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
 </script>
+
+<style>
+.apexcharts-inner.apexcharts-graphical {
+    transform: translate(0, 0) !important;
+}
+
+.vue-apexcharts, .apexcharts-radialbar {
+    width: 100px !important;
+}
+
+.apexcharts-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.apexcharts-svg > foreignObject, .apexcharts-svg g {
+    width: 100px;
+    height: 100px;
+}
+</style>
 
 <template>
 
     <div class="flex gap-4 p-8">
-        <div class="flex justify-start items-center border border-gray-200 px-8 py-2 rounded">
-            <apexchart type="radialBar" :options="chart_test_dgo.options"
+        <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded">
+            <apexchart ref="cpr" width="180" class="flex-none grow-0" type="radialBar" :options="chart_test_dgo.options"
                        :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
-            <div>
+            <div class="shrink w-full ml-8">
+                <p class="font-bold text-gray-500">Entrega de Material</p>
+                <p class="font-medium text-gray-400">{{ c[1] }} de {{ c[0] }}</p>
+            </div>
+        </div>
+        <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded">
+            <apexchart width="180" type="radialBar" :options="chart_test_dgo.options"
+                       :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+            <div class="shrink w-full ml-8">
                 <p class="font-bold text-gray-500">Entrega de Material</p>
                 <p class="font-medium text-gray-400">233 de 599</p>
             </div>
         </div>
-        <div class="flex justify-start items-center border border-gray-200 px-8 py-2 rounded">
+        <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded">
             <apexchart width="180" type="radialBar" :options="chart_test_dgo.options"
                        :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
-            <div>
-                <p class="font-bold text-gray-500">Entrega de Material</p>
-                <p class="font-medium text-gray-400">233 de 599</p>
-            </div>
-        </div>
-        <div class="flex justify-start items-center border border-gray-200 px-8 py-2 rounded">
-            <apexchart width="180" type="radialBar" :options="chart_test_dgo.options"
-                       :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
-            <div>
+            <div class="shrink w-full ml-8">
                 <p class="font-bold text-gray-500 text-sm">Entrega de Material</p>
                 <p class="font-medium text-gray-400 text-xs">233 de 599</p>
             </div>
@@ -391,7 +409,7 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
         <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
             <!--            <ApplicationLogo class="block h-12 w-auto"/>-->
 
-            <h1 class="mt-8 text-3xl font-medium text-gray-900">
+            <h1 class="text-3xl font-medium text-gray-900">
                 Durango.
             </h1>
 
@@ -405,8 +423,7 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
         <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
 
             <div>
-                {{ chartData }}
-                <apexchart width="500" type="donut" :options="chart_packages_dgo.options"
+                <apexchart ref="chart_packages_dgo" width="500" type="donut" :options="chart_packages_dgo.options"
                            :series="chart_packages_dgo.series" :key="chart_packages_dgo.id"></apexchart>
             </div>
 
@@ -420,28 +437,6 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
                            :series="chart_aec_registration_dgo.series" :key="chart_aec_registration_dgo.id"></apexchart>
             </div>
 
-            <!--            <div class="flex justify-center items-center">
-                            <RadialProgress
-                                :diameter="diameter"
-                                :total-steps="totalSteps"
-                                :completed-steps="completedSteps"
-                                :animate-speed="animateSpeed"
-                                :stroke-width="strokeWidth"
-                                :inner-stroke-width="innerStrokeWidth"
-                                :stroke-linecap="strokeLinecap"
-                                :start-color="startColor"
-                                :stop-color="stopColor"
-                                :inner-stroke-color="innerStrokeColor"
-                                :timing-func="timingFunc"
-                                :is-clockwise="isClockwise"
-                            >
-                                {{ completedSteps }}/{{ totalSteps }}
-                                <p class="text-sm">Avance</p>
-                            </RadialProgress>
-                            <PrimaryButton class="mt-4" :disabled="completedSteps >= totalSteps"
-                                           @click.prevent="completedSteps++">Actualizar
-                            </PrimaryButton>
-                        </div>-->
         </div>
 
         <div class="p-6 lg:p-8 bg-white border-b border-gray-200">

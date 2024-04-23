@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-         $schedule->job(broadcast(new PacketsReceivedEvent())->toOthers())->everyFiveSeconds()->withoutOverlapping();
+         $schedule->call(function () {
+             broadcast(new PacketsReceivedEvent());
+         })->everySecond();
     }
 
     /**
