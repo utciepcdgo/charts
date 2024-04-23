@@ -388,22 +388,6 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
                 <p class="font-medium text-gray-400">{{ c[1] }} de {{ c[0] }}</p>
             </div>
         </div>
-        <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded">
-            <apexchart width="180" type="radialBar" :options="chart_test_dgo.options"
-                       :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
-            <div class="shrink w-full ml-8">
-                <p class="font-bold text-gray-500">Entrega de Material</p>
-                <p class="font-medium text-gray-400">233 de 599</p>
-            </div>
-        </div>
-        <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded">
-            <apexchart width="180" type="radialBar" :options="chart_test_dgo.options"
-                       :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
-            <div class="shrink w-full ml-8">
-                <p class="font-bold text-gray-500 text-sm">Entrega de Material</p>
-                <p class="font-medium text-gray-400 text-xs">233 de 599</p>
-            </div>
-        </div>
     </div>
     <div>
         <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
