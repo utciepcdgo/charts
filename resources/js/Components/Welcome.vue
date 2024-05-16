@@ -27,7 +27,7 @@ export default {
         return {
             props,
             toFixed,
-            c
+            c // Realtime data test
         }
     },
     data() {

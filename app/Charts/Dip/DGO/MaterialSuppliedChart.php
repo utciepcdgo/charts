@@ -2,21 +2,18 @@
 
 namespace App\Charts\Dip\DGO;
 
-use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Illuminate\Support\Facades\DB;
 
 class MaterialSuppliedChart
 {
-    protected LarapexChart $chart;
     protected int $municipio;
 
-    public function __construct(LarapexChart $chart)
+    public function __construct()
     {
-        $this->chart = $chart;
         $this->municipio = 5;
     }
 
-    public function build(): array
+    public function build()
     {
         // PAQUETES ENTREGADOS A CAES
         $material_x = DB::Connection('mysql_dgo')->table('paquetes AS p')
@@ -36,8 +33,7 @@ class MaterialSuppliedChart
             ->where('c.cat_municipio_id', '=', $this->municipio)
             ->get()->count();
 
-        return $this->chart->donutChart()
-            ->addData([$material_x, ($paquetes_x - $material_x)])
-            ->toVue();
+        // CONVERT TO JSON RESPONSE
+        return json_encode(array("avance" => $material_x, "total" => $paquetes_x));
     }
 }
