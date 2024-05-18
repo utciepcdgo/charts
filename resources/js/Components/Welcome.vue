@@ -379,30 +379,46 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
 
 <template>
 
-    <div class="flex gap-4 p-8">
-        <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded">
-            <apexchart ref="cpr" width="180" class="flex-none grow-0" type="radialBar" :options="chart_test_dgo.options"
-                       :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
-            <div class="shrink w-full ml-8">
-                <p class="font-bold text-gray-500">Entrega de Material</p>
-                <p class="font-medium text-gray-400">{{ c[1] }} de {{ c[0] }}</p>
+    <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+        <h1 class="text-3xl font-medium text-gray-900">
+            Durango.
+        </h1>
+
+        <p class="mt-2 text-gray-500 leading-relaxed">
+            Estadísticas de paquetes recibidos y paquetes enviados en la ciudad de Durango, comprendida por los
+            Distritos Locales I al VI.
+        </p>
+        <div class="flex gap-4 p-8">
+            <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded">
+                <apexchart ref="cpr" width="180" class="flex-none grow-0" type="radialBar"
+                           :options="chart_test_dgo.options"
+                           :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+                <div class="shrink w-full ml-8">
+                    <p class="font-bold text-gray-500">Entrega de Material</p>
+                    <p class="font-medium text-gray-400">{{ c[1] }} de {{ c[0] }}</p>
+                </div>
+            </div>
+            <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded">
+                <apexchart ref="cpr" width="180" class="flex-none grow-0" type="radialBar"
+                           :options="chart_test_dgo.options"
+                           :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+                <div class="shrink w-full ml-8">
+                    <p class="font-bold text-gray-500">Entrega de Material</p>
+                    <p class="font-medium text-gray-400">{{ c[1] }} de {{ c[0] }}</p>
+                </div>
+            </div>
+            <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded">
+                <apexchart ref="cpr" width="180" class="flex-none grow-0" type="radialBar"
+                           :options="chart_test_dgo.options"
+                           :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+                <div class="shrink w-full ml-8">
+                    <p class="font-bold text-gray-500">Entrega de Material</p>
+                    <p class="font-medium text-gray-400">{{ c[1] }} de {{ c[0] }}</p>
+                </div>
             </div>
         </div>
     </div>
     <div>
-        <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-            <!--            <ApplicationLogo class="block h-12 w-auto"/>-->
-
-            <h1 class="text-3xl font-medium text-gray-900">
-                Durango.
-            </h1>
-
-            <p class="mt-2 text-gray-500 leading-relaxed">
-                Estadísticas de paquetes recibidos y paquetes enviados en la ciudad de Durango, comprendida por los
-                Distritos Locales I al VI.
-            </p>
-
-        </div>
 
         <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
 
