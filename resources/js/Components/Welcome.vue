@@ -383,7 +383,7 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
         <h1 class="text-3xl font-medium text-gray-900 mb-6">
             Durango
         </h1>
-        <div class="flex gap-4">
+        <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-3 gap-4 mb-4">
             <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
                 <apexchart ref="cpr" width="180" class="flex-none grow-0" type="radialBar"
                            :options="chart_test_dgo.options"
