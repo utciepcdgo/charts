@@ -10,7 +10,13 @@ class DurangoController extends Controller
     public function index()
     {
 
-        return Inertia::render('Stats/Durango');
+        $packetsReceived = array("series" =>
+            array("received" => 1, "expected" => 100, "progress" => 72)
+        );
+
+        return Inertia::render('Stats/Durango', [
+            'packetsReceived' => json_encode($packetsReceived)
+        ]);
 
     }
 }

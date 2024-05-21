@@ -1,16 +1,46 @@
+<script setup lang="ts">
+import AppLayout from '@/Layouts/AppLayout.vue';
+</script>
+
 <script lang="ts">
+import CircleChart from "@/Components/Charts/CircleChart.vue";
 
-import AppLayout from "@/Layouts/AppLayout.vue";
-
-export default {
-
+interface Chart extends Object {
+    series: {
+        received: number,
+        expected: number,
+        progress: number
+    }
 }
 
+export default {
+    components: {
+        CircleChart
+    },
+    props: {
+        packetsReceived: {
+            type: Object as () => Chart,
+            required: true
+        },
+    },
+    mounted() {
+        return {
+            packetsReceived() {
+                return JSON.parse(this.packetsReceived)
+            }
+        }
+    },
+    computed: {
+        packetsReceived() {
+            return JSON.parse(this.packetsReceived)
+        }
+    }
+}
 
 </script>
 
 <template>
-    <AppLayout title="Dashboard">
+    <AppLayout title="Durango">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Durango
@@ -18,35 +48,29 @@ export default {
         </template>
 
         <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-            <h1 class="text-3xl font-medium text-gray-900 mb-6">
-                Durango
-            </h1>
             <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-3 gap-4 mb-4">
                 <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
-                    <apexchart ref="cpr" width="180" class="flex-none grow-0" type="radialBar"
-                               :options="chart_test_dgo.options"
-                               :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+                    <circle-chart :series="[packetsReceived.series.progress]" :key="1"></circle-chart>
                     <div class="shrink w-full ml-8">
                         <p class="font-bold text-gray-500">Entrega de Material</p>
-                        <p class="font-medium text-gray-400">{{ c[1] }} de {{ c[0] }}</p>
+                        <p class="font-medium text-gray-400">{{ packetsReceived.series.received }} de
+                            {{ packetsReceived.series.expected }}</p>
                     </div>
                 </div>
                 <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
-                    <apexchart ref="cpr" width="180" class="flex-none grow-0" type="radialBar"
-                               :options="chart_test_dgo.options"
-                               :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+                    <circle-chart :series="[packetsReceived.series.progress]" :key="2"></circle-chart>
                     <div class="shrink w-full ml-8">
                         <p class="font-bold text-gray-500">Entrega de Material</p>
-                        <p class="font-medium text-gray-400">{{ c[1] }} de {{ c[0] }}</p>
+                        <p class="font-medium text-gray-400">{{ packetsReceived.series.received }} de
+                            {{ packetsReceived.series.expected }}</p>
                     </div>
                 </div>
                 <div class="flex w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
-                    <apexchart ref="cpr" width="180" class="flex-none grow-0" type="radialBar"
-                               :options="chart_test_dgo.options"
-                               :series="chart_test_dgo.series" :key="chart_test_dgo.id"></apexchart>
+                    <circle-chart :series="[packetsReceived.series.progress]" :key="3"></circle-chart>
                     <div class="shrink w-full ml-8">
                         <p class="font-bold text-gray-500">Entrega de Material</p>
-                        <p class="font-medium text-gray-400">{{ c[1] }} de {{ c[0] }}</p>
+                        <p class="font-medium text-gray-400">{{ packetsReceived.series.received }} de
+                            {{ packetsReceived.series.expected }}</p>
                     </div>
                 </div>
             </div>
