@@ -18,9 +18,20 @@ export default {
         CircleChart
     },
     props: {
+        materialSupplied: {
+            type: Object as () => Chart,
+        },
         packetsReceived: {
             type: Object as () => Chart,
-            required: true
+        },
+        aecRegistration: {
+            type: Object as () => Chart,
+        },
+        collatedPackets: {
+            type: Object as () => Chart,
+        },
+        recountPackets: {
+            type: Object as () => Chart,
         },
     },
     mounted() {
