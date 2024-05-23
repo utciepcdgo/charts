@@ -11,7 +11,7 @@ class DurangoController extends Controller
     {
         return Inertia::render('Stats/Durango', [
             'materialSupplied' => $this->getMaterialSupplied(),
-            'packetsReceived' => $this->getPacketsReceived(),
+            'packetsReceived' => parent::_getPacketsReceived(),
             'aecRegistration' => $this->getAECRegistration(),
             // COMPUTOS
             'collatedPackets' => $this->getCollatedPackets(),
@@ -19,15 +19,6 @@ class DurangoController extends Controller
 
         ]);
 
-    }
-
-    public function getPacketsReceived()
-    {
-        $packetsReceived = array("series" =>
-            array("received" => 95, "expected" => 100, "progress" => 72)
-        );
-
-        return json_encode($packetsReceived);
     }
 
     public function getMaterialSupplied()

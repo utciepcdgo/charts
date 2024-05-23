@@ -23,6 +23,9 @@ export default {
         },
         packetsReceived: {
             type: Object as () => Chart,
+            coerce: (value: string) => {
+                return JSON.parse(value)
+            }
         },
         aecRegistration: {
             type: Object as () => Chart,
@@ -34,17 +37,13 @@ export default {
             type: Object as () => Chart,
         },
     },
-    mounted() {
-        return {
-            packetsReceived() {
-                return JSON.parse(this.packetsReceived)
-            }
-        }
-    },
     computed: {
-        packetsReceived() {
+        packetsReceived: function () {
             return JSON.parse(this.packetsReceived)
         }
+    },
+    mounted() {
+        console.log(this.packetsReceived)
     }
 }
 
