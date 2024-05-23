@@ -4,8 +4,9 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 
 <script lang="ts">
 import CircleChart from "@/Components/Charts/CircleChart.vue";
+import type { PropType } from 'vue'
 
-interface Chart extends Object {
+interface Chart {
     series: {
         received: number,
         expected: number,
@@ -19,28 +20,25 @@ export default {
     },
     props: {
         materialSupplied: {
-            type: Object as () => Chart,
+            type: Object as PropType<Chart>,
+            required: true
         },
         packetsReceived: {
-            type: Object as () => Chart,
-            coerce: (value: string) => {
-                return JSON.parse(value)
-            }
+            type: Object as PropType<Chart>,
+            required: true
         },
         aecRegistration: {
-            type: Object as () => Chart,
+            type: Object as PropType<Chart>,
+            required: true
         },
         collatedPackets: {
-            type: Object as () => Chart,
+            type: Object as PropType<Chart>,
+            required: true
         },
         recountPackets: {
-            type: Object as () => Chart,
+            type: Object as PropType<Chart>,
+            required: true
         },
-    },
-    computed: {
-        packetsReceived: function () {
-            return JSON.parse(this.packetsReceived)
-        }
     },
     mounted() {
         console.log(this.packetsReceived)

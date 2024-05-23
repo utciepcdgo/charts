@@ -1,8 +1,9 @@
 <?php
 
 return [
-    'casillas' => [
-        'mr' => 825,
-        'especiales' => 12,
+
+    'actas' => [
+        'durango' => 861,
     ],
+
 ];
