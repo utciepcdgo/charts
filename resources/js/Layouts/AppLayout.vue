@@ -136,8 +136,8 @@ const logout = () => {
             </aside>
 
             <!-- Page Content -->
-            <main class="p-4 sm:ml-64">
-                <div class="p-4 rounded-lg dark:border-gray-700 mt-14">
+            <main class="sm:p-4 sm:ml-64">
+                <div class="sm:p-4 rounded-lg dark:border-gray-700 mt-14">
                     <!-- Page Heading -->
                     <header v-if="$slots.header" class="bg-white shadow">
                         <div class="max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
