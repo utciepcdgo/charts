@@ -44,10 +44,10 @@ class Controller extends BaseController
             ->get()->count();
 
         // PROGRESS
-        $packets_progress = number_format((($packets_y / $packets_x) * 100), 2, '.', ',');
+        $packets_progress = number_format((($packets_y / config('elections.aec.' . $this->municipio)) * 100), 2, '.', ',');
 
         return response()->json(array("series" =>
-            array("received" => $packets_y, "expected" => $packets_x, "progress" => $packets_progress)
+            array("received" => $packets_y, "expected" => config('elections.aec.' . $this->municipio), "progress" => $packets_progress)
         ));
     }
 
@@ -72,10 +72,10 @@ class Controller extends BaseController
             ->get()->count();
 
         // PROGRESS
-        $packets_progress = number_format((($packets_y / $packets_x) * 100), 2, '.', ',');
+        $packets_progress = number_format((($packets_y / config('elections.aec.' . $this->municipio)) * 100), 2, '.', ',');
 
         return response()->json(array("series" =>
-            array("received" => $packets_y, "expected" => $packets_x, "progress" => $packets_progress)
+            array("received" => $packets_y, "expected" => config('elections.aec.' . $this->municipio), "progress" => $packets_progress)
         ));
     }
 
@@ -91,7 +91,12 @@ class Controller extends BaseController
             ->count();
 
         // PROGRESS
-        $registrations_progress = number_format((($registrations_x / ((int) config('elections.aec.' . $this->municipio))) * 100), 2, '.', ',');
+        // Cath if registrations_x is zero
+        if ($registrations_x == 0) {
+            $registrations_progress = 0;
+        } else {
+            $registrations_progress = number_format((($registrations_x / ((int)config('elections.aec.' . $this->municipio))) * 100), 2, '.', ',');
+        }
 
         return response()->json(array("series" =>
             array("received" => $registrations_x, "expected" => config('elections.aec.' . $this->municipio), "progress" => $registrations_progress)
