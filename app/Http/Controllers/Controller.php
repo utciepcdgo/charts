@@ -2,24 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use http\Env\Response;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Type\Integer;
-use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
+use Illuminate\Support\HigherOrderCollectionProxy;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    protected int $municipio;
+    protected $municipio;
+    protected $expected;
 
     public function __construct($municipio = 0)
     {
-        $this->municipio = $municipio;
+        $this->municipio = DB::Connection('mysql_dgo')->table('cat_municipios')->select('id')
+            ->where('id', '=', $municipio)->get()->first();
+
+//        $this->expected = config('elections.aec.' . $this->municipio->id, 5);
+
+    }
+
+    public function _isTheWay(): array
+    {
+        $distritos = DB::Connection('mysql_dgo')->table('cat_distritos')->select('distrito')
+            ->where('cat_municipio_id', '=', $this->municipio->id)->get();
+
+//        dd($this->municipio->id, $distritos->pluck('distrito')->toArray());
+
+        // 1 = Distritos, 2 = Municipio
+        if ($distritos->count() >= 1) return [1, $distritos->pluck('distrito')->toArray()];
+        if ($distritos->count() == 0) return [2, [$this->municipio]];
+
+        return ["Sin resultados"];
     }
 
     public function _getPacketsReceived(): JsonResponse
@@ -30,7 +48,7 @@ class Controller extends BaseController
             ->select('p.id')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->where('p.eleccion_id', '=', 3)
-            ->where('c.cat_municipio_id', '=', $this->municipio)
+            ->whereIn(($this->_isTheWay()[0] == 1 ? 'c.cat_distrito_id' : 'c.cat_municipio_id'), $this->_isTheWay()[1])
             ->get()->count();
 
         // PAQUETES ENTREGADOS
@@ -40,14 +58,14 @@ class Controller extends BaseController
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->where('p.eleccion_id', '=', 3)
             ->where('p.estado', 1)
-            ->where('c.cat_municipio_id', '=', $this->municipio)
+            ->whereIn(($this->_isTheWay()[0] == 1 ? 'c.cat_distrito_id' : 'c.cat_municipio_id'), $this->_isTheWay()[1])
             ->get()->count();
 
         // PROGRESS
-        $packets_progress = number_format((($packets_y / config('elections.aec.' . $this->municipio)) * 100), 2, '.', ',');
+        $packets_progress = $packets_y > 0 ? (number_format((($packets_y / $packets_x) * 100), 2, '.', ',')) : 0.00;
 
         return response()->json(array("series" =>
-            array("received" => $packets_y, "expected" => config('elections.aec.' . $this->municipio), "progress" => $packets_progress)
+            array("received" => $packets_y, "expected" => $packets_x, "progress" => $packets_progress)
         ));
     }
 
@@ -58,7 +76,7 @@ class Controller extends BaseController
             ->select('p.id')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->where('p.eleccion_id', '=', 3)
-            ->where('c.cat_municipio_id', '=', $this->municipio)
+            ->whereIn(($this->_isTheWay()[0] == 1 ? 'c.cat_distrito_id' : 'c.cat_municipio_id'), $this->_isTheWay()[1])
             ->get()->count();
 
         // PAQUETES ENTREGADOS A CAES
@@ -66,16 +84,16 @@ class Controller extends BaseController
             ->select('c.seccion', 'c.casilla', 'p.eleccion_id', 'ec.*')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->join('entrega_cae AS ec', 'p.id', '=', 'ec.paquete_id')
-            ->where('c.cat_municipio_id', $this->municipio)
             ->where('p.eleccion_id', 3)
             ->where('ec.deleted_at', null)
-            ->get()->count();
+            ->whereIn(($this->_isTheWay()[0] == 1 ? 'c.cat_distrito_id' : 'c.cat_municipio_id'), $this->_isTheWay()[1])
+            ->get();
 
         // PROGRESS
-        $packets_progress = number_format((($packets_y / config('elections.aec.' . $this->municipio)) * 100), 2, '.', ',');
+        $packets_progress = $packets_y->count() > 0 ? (number_format((($packets_y->count() / $packets_x) * 100), 2, '.', ',')) : 0.00;
 
         return response()->json(array("series" =>
-            array("received" => $packets_y, "expected" => config('elections.aec.' . $this->municipio), "progress" => $packets_progress)
+            array("received" => $packets_y->count(), "expected" => $packets_x, "progress" => $packets_progress)
         ));
     }
 
@@ -87,19 +105,14 @@ class Controller extends BaseController
             ->join('actas_registro AS ar', 'r.id', '=', 'ar.recepcion_id')
             ->where('ar.registro', 1)
             ->where('p.eleccion_id', 3)
-            ->where('c.cat_municipio_id', $this->municipio)
+            ->whereIn(($this->_isTheWay()[0] == 1 ? 'c.cat_distrito_id' : 'c.cat_municipio_id'), $this->_isTheWay()[1])
             ->count();
 
         // PROGRESS
-        // Cath if registrations_x is zero
-        if ($registrations_x == 0) {
-            $registrations_progress = 0;
-        } else {
-            $registrations_progress = number_format((($registrations_x / ((int)config('elections.aec.' . $this->municipio))) * 100), 2, '.', ',');
-        }
+        $registrations_progress = config('elections.aec.' . $this->municipio->id) > 0 ? (number_format((($registrations_x / (int)(config('elections.aec.' . $this->municipio->id))) * 100), 2, '.', ',')) : 0;
 
         return response()->json(array("series" =>
-            array("received" => $registrations_x, "expected" => config('elections.aec.' . $this->municipio), "progress" => $registrations_progress)
+            array("received" => $registrations_x, "expected" => config('elections.aec.' . $this->municipio->id), "progress" => $registrations_progress)
         ));
     }
 

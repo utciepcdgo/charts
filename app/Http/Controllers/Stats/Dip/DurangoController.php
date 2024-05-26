@@ -14,7 +14,7 @@ class DurangoController extends Controller
 
     public function index()
     {
-//        dd(parent::_getPacketsReceived());
+
         return Inertia::render('Stats/Durango', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,
             'packetsReceived'   =>   parent::_getPacketsReceived()  ->original,

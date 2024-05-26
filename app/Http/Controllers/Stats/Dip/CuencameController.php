@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Stats\Dip;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class GuadalupeVictoriaController extends Controller
+class CuencameController extends Controller
 {
-    public function __construct($municipio = 8)
+    public function __construct($municipio = 4)
     {
         parent::__construct($municipio);
     }
@@ -15,7 +16,7 @@ class GuadalupeVictoriaController extends Controller
     public function index()
     {
 
-        return Inertia::render('Stats/GuadalupeVictoria', [
+        return Inertia::render('Stats/Cuencame', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,
             'packetsReceived'   =>   parent::_getPacketsReceived()  ->original,
             'aecRegistration'   =>   parent::_getAECRegistration()  ->original,

@@ -41,26 +41,15 @@ export default {
             required: true
         },
     },
-    mounted() {
-        this.updateMaterialSupplied();
-    },
-    methods: {
-        async updateMaterialSupplied() {
-            const data = await fetch('/api/material-supplied').then((res) => res.json());
-            // this.$refs.msc.updateSeries(data.series)
-            // console.log(this.$refs.msc.$parent.$emit('update:series', data.series.progress));
-            // this.$refs.msc.(data.series.progress)
-        }
-    }
 }
 
 </script>
 
 <template>
-    <AppLayout title="Durango">
+    <AppLayout title="Lerdo">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Durango
+                Lerdo
             </h2>
 <!--            <button @click="updateMaterialSupplied">Actualizar</button>-->
         </template>

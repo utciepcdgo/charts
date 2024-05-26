@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth.session')->get('/material-supplied', function (Request $request) {
+    return response()->json(array("series" =>
+        array("received" => 95, "expected" => 100, "progress" => 72)
+    ));
+});

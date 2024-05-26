@@ -38,9 +38,10 @@ Route::middleware([
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->prefix('stats')->group(function () {
     Route::get('/durango', [App\Http\Controllers\Stats\Dip\DurangoController::class, 'index'])->name('stats.durango');
     Route::get('/santiagopapasquiaro', [App\Http\Controllers\Stats\Dip\SantiagoPapasquiaroController::class, 'index'])->name('stats.santiago');
-    Route::get('/guadalupevictoria', [App\Http\Controllers\Stats\Dip\DurangoController::class, 'index'])->name('stats.guadalupe');
-    Route::get('/mapimi', [App\Http\Controllers\Stats\Dip\DurangoController::class, 'index'])->name('stats.mapimi');
-    Route::get('/gomezpalacio', [App\Http\Controllers\Stats\Dip\DurangoController::class, 'index'])->name('stats.gomez');
-    Route::get('/lerdo', [App\Http\Controllers\Stats\Dip\DurangoController::class, 'index'])->name('stats.lerdo');
-    Route::get('/purblonuevo', [App\Http\Controllers\Stats\Dip\DurangoController::class, 'index'])->name('stats.pueblonuevo');
+    Route::get('/guadalupevictoria', [App\Http\Controllers\Stats\Dip\GuadalupeVictoriaController::class, 'index'])->name('stats.guadalupe');
+    Route::get('/mapimi', [App\Http\Controllers\Stats\Dip\MapimiController::class, 'index'])->name('stats.mapimi');
+    Route::get('/gomezpalacio', [App\Http\Controllers\Stats\Dip\GomezPalacioController::class, 'index'])->name('stats.gomez');
+    Route::get('/lerdo', [App\Http\Controllers\Stats\Dip\LerdoController::class, 'index'])->name('stats.lerdo');
+    Route::get('/cuencame', [App\Http\Controllers\Stats\Dip\CuencameController::class, 'index'])->name('stats.cuencame');
+    Route::get('/purblonuevo', [App\Http\Controllers\Stats\Dip\PuebloNuevoController::class, 'index'])->name('stats.pueblonuevo');
 });

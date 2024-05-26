@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent, defineExpose} from 'vue'
 import ApexCharts from "vue3-apexcharts";
 
 export default defineComponent({
@@ -23,7 +23,6 @@ export default defineComponent({
     data() {
         return {
             id: 6,
-            series: this.series,
             options: {
                 colors: ['#6200EA'],
                 chart: {
@@ -86,6 +85,9 @@ export default defineComponent({
             },
         }
     }
+})
+defineExpose({
+    apexChart: ApexCharts
 })
 </script>
 
