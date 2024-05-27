@@ -19,7 +19,7 @@ class Controller extends BaseController
 
     public function __construct($municipio = 0)
     {
-        $this->municipio = DB::Connection('mysql_dgo')->table('cat_municipios')->select('id')
+        $this->municipio = DB::Connection('sice_' . (str_pad($municipio, 2, '0', STR_PAD_LEFT)))->table('cat_municipios')->select('id')
             ->where('id', '=', $municipio)->get()->first();
 
 //        $this->expected = config('elections.aec.' . $this->municipio->id, 5);
@@ -28,7 +28,7 @@ class Controller extends BaseController
 
     public function _isTheWay(): array
     {
-        $distritos = DB::Connection('mysql_dgo')->table('cat_distritos')->select('distrito')
+        $distritos = DB::Connection('sice_' . str_pad($this->municipio->id, 2, '0', STR_PAD_LEFT))->table('cat_distritos')->select('distrito')
             ->where('cat_municipio_id', '=', $this->municipio->id)->get();
 
 //        dd($this->municipio->id, $distritos->pluck('distrito')->toArray());
@@ -44,7 +44,7 @@ class Controller extends BaseController
     {
         // TOTAL PAQUETES
         // @param $this->municipio: DURANGO
-        $packets_x = DB::Connection('mysql_dgo')->table('paquetes AS p')
+        $packets_x = DB::Connection('sice_' . str_pad($this->municipio->id, 2, '0', STR_PAD_LEFT))->table('paquetes AS p')
             ->select('p.id')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->where('p.eleccion_id', '=', 3)
@@ -53,7 +53,7 @@ class Controller extends BaseController
 
         // PAQUETES ENTREGADOS
         // @param $this->municipio: DURANGO
-        $packets_y = DB::Connection('mysql_dgo')->table('paquetes AS p')
+        $packets_y = DB::Connection('sice_' . str_pad($this->municipio->id, 2, '0', STR_PAD_LEFT))->table('paquetes AS p')
             ->select('p.id')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->where('p.eleccion_id', '=', 3)
@@ -72,7 +72,7 @@ class Controller extends BaseController
     public function _getMaterialSupplied(): jsonResponse
     {
         // TOTAL PAQUETES
-        $packets_x = DB::Connection('mysql_dgo')->table('paquetes AS p')
+        $packets_x = DB::Connection('sice_' . str_pad($this->municipio->id, 2, '0', STR_PAD_LEFT))->table('paquetes AS p')
             ->select('p.id')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->where('p.eleccion_id', '=', 3)
@@ -80,7 +80,7 @@ class Controller extends BaseController
             ->get()->count();
 
         // PAQUETES ENTREGADOS A CAES
-        $packets_y = DB::Connection('mysql_dgo')->table('paquetes AS p')
+        $packets_y = DB::Connection('sice_' . str_pad($this->municipio->id, 2, '0', STR_PAD_LEFT))->table('paquetes AS p')
             ->select('c.seccion', 'c.casilla', 'p.eleccion_id', 'ec.*')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->join('entrega_cae AS ec', 'p.id', '=', 'ec.paquete_id')
@@ -99,7 +99,7 @@ class Controller extends BaseController
 
     public function _getAECRegistration(): jsonResponse
     {
-        $registrations_x = DB::Connection('mysql_dgo')->table('recepciones AS r')->select('r.id')
+        $registrations_x = DB::Connection('sice_' . str_pad($this->municipio->id, 2, '0', STR_PAD_LEFT))->table('recepciones AS r')->select('r.id')
             ->join('paquetes AS p', 'p.id', '=', 'r.paquete_id')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->join('actas_registro AS ar', 'r.id', '=', 'ar.recepcion_id')
