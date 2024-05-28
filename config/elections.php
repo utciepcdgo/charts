@@ -19,4 +19,15 @@ return [
         '33' => 0,
     ],
 
+    'cme' => [
+        '5' => 'Durango',
+        '33' => 'Santiago Papasquiaro',
+        '8' => 'Guadalupe Victoria',
+        '13' => 'Mapimí',
+        '7' => 'Gómez Palacio',
+        '12' => 'Lerdo',
+        '4' => 'Cuencamé',
+        '24' => 'Pueblo Nuevo',
+    ]
+
 ];

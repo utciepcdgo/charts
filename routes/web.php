@@ -29,10 +29,10 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\Dashboard\ChartController::class, 'index'])->name('dashboard');
-    /*    Route::get('/dashboard', function () {
-            return Inertia::render('Dashboard');
-        })->name('dashboard');*/
+//    Route::get('/dashboard', [App\Http\Controllers\Dashboard\ChartController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        return redirect()->route('stats.durango');
+    })->name('dashboard');
 });
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->prefix('stats')->group(function () {
@@ -44,4 +44,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/lerdo', [App\Http\Controllers\Stats\Dip\LerdoController::class, 'index'])->name('stats.lerdo');
     Route::get('/cuencame', [App\Http\Controllers\Stats\Dip\CuencameController::class, 'index'])->name('stats.cuencame');
     Route::get('/purblonuevo', [App\Http\Controllers\Stats\Dip\PuebloNuevoController::class, 'index'])->name('stats.pueblonuevo');
+});
+
+// Route group for Excel export
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->prefix('export')->group(function () {
+   Route::get('/bodega', [App\Http\Controllers\Controller::class, '_getWarehouseLog'])->name('export.bodega');
 });

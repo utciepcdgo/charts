@@ -8,21 +8,20 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\HigherOrderCollectionProxy;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
     protected $municipio;
-    protected $expected;
 
-    public function __construct($municipio = 0)
+    public function __construct($municipio = 5)
     {
+
         $this->municipio = DB::Connection('sice_' . (str_pad($municipio, 2, '0', STR_PAD_LEFT)))->table('cat_municipios')->select('id')
             ->where('id', '=', $municipio)->get()->first();
-
-//        $this->expected = config('elections.aec.' . $this->municipio->id, 5);
 
     }
 
@@ -128,5 +127,66 @@ class Controller extends BaseController
         return response()->json(array("series" =>
             array("received" => 95, "expected" => 100, "progress" => 72)
         ));
+    }
+
+    public function _getWarehouseLog()
+    {
+        set_time_limit(300);
+
+        $bitacora = DB::Connection('sice_' . str_pad($this->municipio->id, 2, '0', STR_PAD_LEFT))->table('bitacora_bodega')->select('bodega.paquete_id', 'casillas.seccion', 'casillas.casilla', 'bitacora_bodega.*')
+            ->join('bodega', 'bodega.id', '=', 'bodega_id')
+            ->join('paquetes', 'paquetes.id', '=', 'paquete_id')
+            ->join('casillas', 'casillas.id', '=', 'paquetes.casilla_id')
+            ->get();
+
+        // Create a new Excel file using template file at resources/docs/templates/BitacoraEntradaSalida.xlsx and PHPSpreadsheet library,
+        // then fill it with data from $bitacora and return it as a StreamedResponse.
+
+        $template = base_path('resources/docs/templates/BitacoraEntradaSalida.xlsx');
+        $reader = new Xlsx();
+
+        $reader->setLoadSheetsOnly(["Hoja1"]);
+        $spreadsheet = $reader->load($template);
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Setting the header
+        $sheet->setCellValue('C4', "Entidad Federativa: Durango. Consejo Municipal Electoral de: " . config('elections.cme.' . $this->municipio->id));
+
+        // Setting the table content
+        foreach ($bitacora as $key => $registro) {
+
+            if ($key < $bitacora->count() + 1) {
+                $sheet->insertNewRowBefore(8);
+                $sheet->mergeCells('G8:L8');
+            }
+
+            $fecha = Carbon::make($registro->created_at);
+
+            $sheet->setCellValue('C8', $fecha->format('Y-m-d'));
+            $sheet->setCellValue('D8', $fecha->format('H:i:s'));
+            $sheet->setCellValue('F8', $registro->seccion . ' ' . $registro->casilla);
+            $sheet->setCellValue('G8', $registro->motivo);
+
+
+            ($registro->entrada_salida == 'Registro') ? $sheet->setCellValue('A8', 'X') : $sheet->setCellValue('B8', 'X');
+        }
+
+        $sheet->removeRow(7);
+
+        // Save the file and return it as a StreamedResponse
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save(base_path() . '/public/docs/temp.xlsx');
+
+        $file = base_path() . "/Plantillas/doc.xlsx";
+
+        $headers = array(
+            'Content-Type: application/vnd.ms-excel',
+        );
+
+        $filename = str_replace(' ', '_', strtoupper(config('elections.cme.' . $this->municipio->id))) . '_BITACORA_BODEGA_' . time();
+
+
+        return response()->download($file, $filename . '.xlsx', $headers);
     }
 }
