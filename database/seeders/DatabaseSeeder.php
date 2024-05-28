@@ -138,5 +138,9 @@ class DatabaseSeeder extends Seeder
         foreach ($ine_users as $ine_user) {
             User::factory()->create($ine_user);
         }
+
+        foreach ($opl_users as $opl_user) {
+            User::factory()->create($opl_user);
+        }
     }
 }
