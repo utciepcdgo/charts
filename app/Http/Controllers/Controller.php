@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Controller extends BaseController
 {
