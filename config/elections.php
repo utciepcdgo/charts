@@ -3,6 +3,8 @@
 return [
 
     'aec' => [
+        // CUENCAMÉ
+        '4' => 209,
         // DURANGO
         '5' => 861,
         // GÓMEZ PALACIO

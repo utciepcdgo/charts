@@ -279,7 +279,7 @@ const logout = () => {
                             </button>
                         </div>
                     </header>
-<!--                    <Link :href="route('export.bodega')" class="text-blue-500">Descargar</Link>-->
+                    <Link @click="entregas" class="text-blue-500">Descargar</Link>
                     <TransitionGroup
                         tag="div"
                         enter-from-class="translate-y-full opacity-0"
