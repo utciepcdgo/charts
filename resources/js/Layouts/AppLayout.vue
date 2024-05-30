@@ -1,9 +1,11 @@
 <script setup>
-import {onMounted, ref} from 'vue';
+import {defineComponent, onMounted, ref} from 'vue';
 import {Head, Link, router} from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
 import NavLink from '@/Components/NavLink.vue';
+import {useLoading} from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css';
 import {
     initAccordions,
     initCarousels,
@@ -36,6 +38,12 @@ defineProps({
     title: String,
 });
 
+const $loading = useLoading({
+    canCancel: false,
+    isFullPage: true,
+    opacity: 0.7,
+});
+
 const showingNavigationDropdown = ref(false);
 
 const switchToTeam = (team) => {
@@ -46,26 +54,22 @@ const switchToTeam = (team) => {
     });
 };
 
-const download = (data, filename) => {
-    const url = window.URL.createObjectURL(
-        new Blob([data], {type: "application/vnd.ms-excel"})
-    );
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", filename);
-    document.body.appendChild(link);
-    link.click();
-};
-
 const request = () => {
-    // axios.get('/export/bodega', null, {
-    //     responseType: 'arraybuffer',
-    // })
-    //     .then(response => {
-    //         download(response.data, 'bodega.xlsx');
-    //     });
+    const loader = $loading.show({
 
-    window.open('/export/bodega', '_blank');
+    });
+    axios.get('/export/bodega/', {responseType: 'blob'}).then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'BitacoraEntregasCAE.xlsx');
+        document.body.appendChild(link);
+        link.click();
+
+    }).then(() => {
+        loader.hide();
+    });
+    // window.open('/export/bodega', '_blank');
 }
 
 const logout = () => {
@@ -301,16 +305,31 @@ const logout = () => {
                             </button>
                         </div>
                     </header>
-                    <Link @click="request" class="text-blue-500">Descargar intertia</Link>
-                    <Link :href="'/export/bodega'" class="text-blue-500">Descargar laravel</Link>
                     <TransitionGroup
                         tag="div"
                         enter-from-class="translate-y-full opacity-0"
                         leave-to-class="translate-y-full opacity-0"
                         enter-active-class="transition ease-out duration-200"
                         leave-active-class="transition ease-in duration-75">
-                        <div>
+                        <div :key="Math.random()">
                             <slot/>
+                        </div>
+                        <div class="flex mt-5 space-x-5">
+                            <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Bitácora de entrega de Documentación Electoral.</h5>
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene los detalles de las entregas realizadas a los CAEL/SEL sobre la Documentación. </p>
+                                <Link @click="request" class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>
+                                        <path d="M13 16h-7a2 2 0 0 0 -2 2"/>
+                                        <path d="M15 19l3 3l3 -3"/>
+                                        <path d="M18 22v-9"/>
+                                    </svg>
+                                    <span>Descargar</span>
+                                </Link>
+                            </div>
+
                         </div>
                     </TransitionGroup>
                 </div>
