@@ -19,7 +19,7 @@ class Controller extends BaseController
     protected int $casillas;
     protected string $database;
 
-    public function __construct($municipio = 12)
+    public function __construct($municipio = 5)
     {
         $this->casillas = config('elections.aec.' . $municipio);
         $this->municipio = $municipio;

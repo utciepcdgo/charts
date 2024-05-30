@@ -15,6 +15,7 @@ class CuencameController extends Controller
 
     public function index()
     {
+        Inertia::share('municipio_id', 4);
 
         return Inertia::render('Stats/Cuencame', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,

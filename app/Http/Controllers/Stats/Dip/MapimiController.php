@@ -14,6 +14,7 @@ class MapimiController extends Controller
 
     public function index()
     {
+        Inertia::share('municipio_id', 13);
 
         return Inertia::render('Stats/Mapimi', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,

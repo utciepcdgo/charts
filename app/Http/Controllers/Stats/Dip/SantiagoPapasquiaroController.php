@@ -14,6 +14,7 @@ class SantiagoPapasquiaroController extends Controller
 
     public function index()
     {
+        Inertia::share('municipio_id', 33);
 
         return Inertia::render('Stats/SantiagoPapasquiaro', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,

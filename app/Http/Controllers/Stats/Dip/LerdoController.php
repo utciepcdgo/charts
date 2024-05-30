@@ -14,6 +14,7 @@ class LerdoController extends Controller
 
     public function index()
     {
+        Inertia::share('municipio_id', 12);
 
         return Inertia::render('Stats/Lerdo', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,

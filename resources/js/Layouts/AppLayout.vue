@@ -1,6 +1,6 @@
 <script setup>
-import {defineComponent, onMounted, ref} from 'vue';
-import {Head, Link, router} from '@inertiajs/vue3';
+import {computed, defineComponent, onMounted, ref} from 'vue';
+import {Head, Link, router, usePage} from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
 import NavLink from '@/Components/NavLink.vue';
@@ -36,15 +36,19 @@ onMounted(() => {
 
 defineProps({
     title: String,
+    municipio_id: String
 });
 
 const $loading = useLoading({
     canCancel: false,
     isFullPage: true,
     opacity: 0.7,
+    color: "#7723ec",
 });
 
 const showingNavigationDropdown = ref(false);
+const page = usePage()
+const municipio_id = computed(() => page.props.municipio_id)
 
 const switchToTeam = (team) => {
     router.put(route('current-team.update'), {
@@ -55,10 +59,13 @@ const switchToTeam = (team) => {
 };
 
 const request = () => {
-    const loader = $loading.show({
-
-    });
-    axios.get('/export/bodega/', {responseType: 'blob'}).then(response => {
+    const loader = $loading.show({});
+    axios.get('/export/bodega/', {
+        params: {
+            municipio_id: municipio_id.value
+        },
+        responseType: 'blob'
+    }).then(response => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
@@ -69,7 +76,6 @@ const request = () => {
     }).then(() => {
         loader.hide();
     });
-    // window.open('/export/bodega', '_blank');
 }
 
 const logout = () => {
@@ -169,112 +175,88 @@ const logout = () => {
                         <!--                        </li>-->
                         <li>
                             <NavLink :href="route('stats.durango')" :active="route().current('stats.durango')">
-                                <svg
-                                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    viewBox="0 0 22 21">
-                                    <path
-                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                    <path
-                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 3v5m4 4h5"/>
+                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
                                 </svg>
                                 <span class="ms-3">Durango</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink :href="route('stats.santiago')" :active="route().current('stats.santiago')">
-                                <svg
-                                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    viewBox="0 0 22 21">
-                                    <path
-                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                    <path
-                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 3v5m4 4h5"/>
+                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
                                 </svg>
                                 <span class="ms-3">Santiago Papasquiaro</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink :href="route('stats.guadalupe')" :active="route().current('stats.guadalupe')">
-                                <svg
-                                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    viewBox="0 0 22 21">
-                                    <path
-                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                    <path
-                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 3v5m4 4h5"/>
+                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
                                 </svg>
                                 <span class="ms-3">Guadalupe Victoria</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink :href="route('stats.mapimi')" :active="route().current('stats.mapimi')">
-                                <svg
-                                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    viewBox="0 0 22 21">
-                                    <path
-                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                    <path
-                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 3v5m4 4h5"/>
+                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
                                 </svg>
                                 <span class="ms-3">Mapimí</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink :href="route('stats.gomez')" :active="route().current('stats.gomez')">
-                                <svg
-                                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    viewBox="0 0 22 21">
-                                    <path
-                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                    <path
-                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 3v5m4 4h5"/>
+                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
                                 </svg>
                                 <span class="ms-3">Gómez Palacio</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink :href="route('stats.lerdo')" :active="route().current('stats.lerdo')">
-                                <svg
-                                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    viewBox="0 0 22 21">
-                                    <path
-                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                    <path
-                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 3v5m4 4h5"/>
+                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
                                 </svg>
                                 <span class="ms-3">Lerdo</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink :href="route('stats.cuencame')" :active="route().current('stats.cuencame')">
-                                <svg
-                                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    viewBox="0 0 22 21">
-                                    <path
-                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                    <path
-                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 3v5m4 4h5"/>
+                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
                                 </svg>
                                 <span class="ms-3">Cuencamé</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink :href="route('stats.pueblonuevo')" :active="route().current('stats.pueblonuevo')">
-                                <svg
-                                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    viewBox="0 0 22 21">
-                                    <path
-                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                    <path
-                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 3v5m4 4h5"/>
+                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
                                 </svg>
                                 <span class="ms-3">Pueblo Nuevo</span>
                             </NavLink>
@@ -288,21 +270,9 @@ const logout = () => {
                 <div class="sm:p-4 rounded-lg dark:border-gray-700 mt-14">
                     <!-- Page Heading -->
                     <header v-if="$slots.header" class="bg-white shadow flex justify-between items-center">
-                        <div class="max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+                        <div class="flex items-center space-x-5 max-w-7xl mt-5 px-4 sm:px-6 lg:px-8">
+                            <img :src="'/images/' + municipio_id + '.png'" alt="Escudo" width="60">
                             <slot name="header"/>
-                        </div>
-                        <div class="px-5">
-                            <button type="button"
-                                    class="flex space-x-1.5 items-center text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747"/>
-                                    <path d="M20 4v5h-5"/>
-                                </svg>
-                                <span>Actualizar</span>
-                            </button>
                         </div>
                     </header>
                     <TransitionGroup
@@ -311,25 +281,70 @@ const logout = () => {
                         leave-to-class="translate-y-full opacity-0"
                         enter-active-class="transition ease-out duration-200"
                         leave-active-class="transition ease-in duration-75">
-                        <div :key="Math.random()">
+                        <div :key="municipio_id">
                             <slot/>
                         </div>
-                        <div class="flex mt-5 space-x-5">
-                            <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Bitácora de entrega de Documentación Electoral.</h5>
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene los detalles de las entregas realizadas a los CAEL/SEL sobre la Documentación. </p>
-                                <Link @click="request" class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                        <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>
-                                        <path d="M13 16h-7a2 2 0 0 0 -2 2"/>
-                                        <path d="M15 19l3 3l3 -3"/>
-                                        <path d="M18 22v-9"/>
-                                    </svg>
-                                    <span>Descargar</span>
-                                </Link>
+                        <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Formatos descargables.</h5>
+                        <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-3 gap-4 mb-4 mt-5">
+                            <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                <div class="flex items-center space-x-4">
+                                    <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Bitácora de entrega de Documentación Electoral.</h5>
+                                </div>
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene los detalles de las entregas realizadas a los CAEL/SEL sobre la Documentación Electoral.</p>
+                                <div class="flex justify-end">
+                                    <Link @click="request" class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>
+                                            <path d="M13 16h-7a2 2 0 0 0 -2 2"/>
+                                            <path d="M15 19l3 3l3 -3"/>
+                                            <path d="M18 22v-9"/>
+                                        </svg>
+                                        <span>Descargar</span>
+                                    </Link>
+                                </div>
                             </div>
-
+                            <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                <div class="flex items-center space-x-4">
+                                    <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Bitácora de Entrada/Salida de Bodega Electoral.</h5>
+                                </div>
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene las entradas y salidas de paquetes de la Bodega Electoral, mismo que especifica la hora, motivo de entrada/salida y el paquete correspondiente.</p>
+                                <div class="flex justify-end">
+<!--                                    <Link @click="alert('Recurso no disponible')"  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
+<!--                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>-->
+<!--                                            <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>-->
+<!--                                            <path d="M13 16h-7a2 2 0 0 0 -2 2"/>-->
+<!--                                            <path d="M15 19l3 3l3 -3"/>-->
+<!--                                            <path d="M18 22v-9"/>-->
+<!--                                        </svg>-->
+<!--                                        <span>Descargar</span>-->
+<!--                                    </Link>-->
+                                    <span class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
+                                </div>
+                            </div>
+                            <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                <div class="flex items-center space-x-4">
+                                    <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Resultados Preliminares.</h5>
+                                </div>
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Resultados de los Partidos Políticos y Coaliciones Electorales en desglose por sección y casilla por el Principio de Mayoría Relativa y Representación Proporcional.</p>
+                                <div class="flex justify-end">
+<!--                                    <Link @click="alert('Recurso no disponible')"  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
+<!--                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>-->
+<!--                                            <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>-->
+<!--                                            <path d="M13 16h-7a2 2 0 0 0 -2 2"/>-->
+<!--                                            <path d="M15 19l3 3l3 -3"/>-->
+<!--                                            <path d="M18 22v-9"/>-->
+<!--                                        </svg>-->
+<!--                                        <span>Descargar</span>-->
+<!--                                    </Link>-->
+                                    <span class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
+                                </div>
+                            </div>
                         </div>
                     </TransitionGroup>
                 </div>

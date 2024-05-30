@@ -14,6 +14,7 @@ class PuebloNuevoController extends Controller
 
     public function index()
     {
+        Inertia::share('municipio_id', 24);
 
         return Inertia::render('Stats/PuebloNuevo', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,

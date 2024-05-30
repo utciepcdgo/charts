@@ -33,8 +33,9 @@ class DeliveryToPersonalController extends Controller
         $sheet_1->setTitle("Entregados");
         $sheet_2->setTitle("Faltantes");
 
-        $municipioName = config('elections.cme.' . $this->municipio);
-        $municipio_id = $this->municipio;
+        $municipioName = config('elections.cme.' . $request->municipio_id);
+        $municipio_id = $request->municipio_id;
+        $this->database = 'sice_' . str_pad($municipio_id, 2, '0', STR_PAD_LEFT);
 
         $distritos = DB::Connection($this->database)->table('cat_distritos')->select('distrito')->where('cat_municipio_id', $municipio_id)->get();
 

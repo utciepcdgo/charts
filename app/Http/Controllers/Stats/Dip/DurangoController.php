@@ -14,6 +14,7 @@ class DurangoController extends Controller
 
     public function index()
     {
+        Inertia::share('municipio_id', 5);
 
         return Inertia::render('Stats/Durango', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,

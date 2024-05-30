@@ -14,14 +14,15 @@ class GomezPalacioController extends Controller
 
     public function index()
     {
+        Inertia::share('municipio_id', 7);
 
         return Inertia::render('Stats/GomezPalacio', [
-            'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,
-            'packetsReceived'   =>   parent::_getPacketsReceived()  ->original,
-            'aecRegistration'   =>   parent::_getAECRegistration()  ->original,
+            'materialSupplied' => parent::_getMaterialSupplied()->original,
+            'packetsReceived' => parent::_getPacketsReceived()->original,
+            'aecRegistration' => parent::_getAECRegistration()->original,
             // CÓMPUTOS
-            'collatedPackets'   =>   parent::_getCollatedPackets()  ->original,
-            'recountPackets'    =>   parent::_getRecountPackets()   ->original,
+            'collatedPackets' => parent::_getCollatedPackets()->original,
+            'recountPackets' => parent::_getRecountPackets()->original,
         ]);
     }
 }
