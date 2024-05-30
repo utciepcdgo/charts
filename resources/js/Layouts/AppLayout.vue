@@ -46,6 +46,28 @@ const switchToTeam = (team) => {
     });
 };
 
+const download = (data, filename) => {
+    const url = window.URL.createObjectURL(
+        new Blob([data], {type: "application/vnd.ms-excel"})
+    );
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+};
+
+const request = () => {
+    // axios.get('/export/bodega', null, {
+    //     responseType: 'arraybuffer',
+    // })
+    //     .then(response => {
+    //         download(response.data, 'bodega.xlsx');
+    //     });
+
+    window.open('/export/bodega', '_blank');
+}
+
 const logout = () => {
     router.post(route('logout'));
 };
@@ -279,7 +301,8 @@ const logout = () => {
                             </button>
                         </div>
                     </header>
-                    <Link @click="entregas" class="text-blue-500">Descargar</Link>
+                    <Link @click="request" class="text-blue-500">Descargar intertia</Link>
+                    <Link :href="'/export/bodega'" class="text-blue-500">Descargar laravel</Link>
                     <TransitionGroup
                         tag="div"
                         enter-from-class="translate-y-full opacity-0"

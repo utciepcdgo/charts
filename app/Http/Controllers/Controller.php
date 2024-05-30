@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -14,18 +15,20 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    protected $municipio;
-    public int $casillas;
+    protected int $municipio;
+    protected int $casillas;
+    protected string $database;
 
     public function __construct($municipio = 5)
     {
         $this->casillas = config('elections.aec.' . $municipio);
         $this->municipio = $municipio;
+        $this->database = 'sice_' . str_pad($municipio, 2, '0', STR_PAD_LEFT);
     }
 
     public function _isTheWay(): array
     {
-        $distritos = DB::Connection('sice_' . str_pad($this->municipio, 2, '0', STR_PAD_LEFT))->table('cat_distritos')->select('distrito')
+        $distritos = DB::Connection($this->database)->table('cat_distritos')->select('distrito')
             ->where('cat_municipio_id', '=', $this->municipio)->get();
 
         // 1 = Distritos, 2 = Municipio
@@ -40,7 +43,7 @@ class Controller extends BaseController
 
         // PAQUETES ENTREGADOS
         // @param $this->municipio: DURANGO
-        $packets_x = DB::Connection('sice_' . str_pad($this->municipio, 2, '0', STR_PAD_LEFT))->table('paquetes AS p')
+        $packets_x = DB::Connection($this->database)->table('paquetes AS p')
             ->select('p.id')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->where('p.eleccion_id', '=', 3)
@@ -59,7 +62,7 @@ class Controller extends BaseController
     public function _getMaterialSupplied(): jsonResponse
     {
         // PAQUETES ENTREGADOS A CAES
-        $packets_x = DB::Connection('sice_' . str_pad($this->municipio, 2, '0', STR_PAD_LEFT))->table('paquetes AS p')
+        $packets_x = DB::Connection($this->database)->table('paquetes AS p')
             ->select('c.seccion', 'c.casilla', 'p.eleccion_id', 'ec.*')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->join('entrega_cae AS ec', 'p.id', '=', 'ec.paquete_id')
@@ -80,7 +83,7 @@ class Controller extends BaseController
 
     public function _getAECRegistration(): jsonResponse
     {
-        $registrations_x = DB::Connection('sice_' . str_pad($this->municipio, 2, '0', STR_PAD_LEFT))->table('recepciones AS r')->select('r.id')
+        $registrations_x = DB::Connection($this->database)->table('recepciones AS r')->select('r.id')
             ->join('paquetes AS p', 'p.id', '=', 'r.paquete_id')
             ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
             ->join('actas_registro AS ar', 'r.id', '=', 'ar.recepcion_id')
@@ -111,62 +114,4 @@ class Controller extends BaseController
         ));
     }
 
-    public function _getWarehouseLog()
-    {
-        $bitacora = DB::Connection('sice_' . str_pad($this->municipio, 2, '0', STR_PAD_LEFT))->table('bitacora_bodega')->select('bodega.paquete_id', 'casillas.seccion', 'casillas.casilla', 'bitacora_bodega.*')
-            ->join('bodega', 'bodega.id', '=', 'bodega_id')
-            ->join('paquetes', 'paquetes.id', '=', 'paquete_id')
-            ->join('casillas', 'casillas.id', '=', 'paquetes.casilla_id')
-            ->get();
-
-        // Create a new Excel file using template file at resources/docs/templates/BitacoraEntradaSalida.xlsx and PHPSpreadsheet library,
-        // then fill it with data from $bitacora and return it as a StreamedResponse.
-
-        $template = base_path('resources/docs/templates/BitacoraEntradaSalida.xlsx');
-        $reader = new Xlsx();
-
-        $reader->setLoadSheetsOnly(["Hoja1"]);
-        $spreadsheet = $reader->load($template);
-
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Setting the header
-        $sheet->setCellValue('C4', "Entidad Federativa: Durango. Consejo Municipal Electoral de: " . config('elections.cme.' . $this->municipio));
-
-        // Setting the table content
-        foreach ($bitacora as $key => $registro) {
-
-            if ($key < $bitacora->count() + 1) {
-                $sheet->insertNewRowBefore(8);
-                $sheet->mergeCells('G8:L8');
-            }
-
-            $fecha = Carbon::make($registro->created_at);
-
-            $sheet->setCellValue('C8', $fecha->format('Y-m-d'));
-            $sheet->setCellValue('D8', $fecha->format('H:i:s'));
-            $sheet->setCellValue('F8', $registro->seccion . ' ' . $registro->casilla);
-            $sheet->setCellValue('G8', $registro->motivo);
-
-
-            ($registro->entrada_salida == 'Registro') ? $sheet->setCellValue('A8', 'X') : $sheet->setCellValue('B8', 'X');
-        }
-
-        $sheet->removeRow(7);
-
-        // Save the file and return it as a StreamedResponse
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $writer->save(base_path() . '/public/docs/temp.xlsx');
-
-        $file = base_path() . '/public/docs/temp.xlsx';
-
-        $headers = array(
-            'Content-Type: application/vnd.ms-excel',
-        );
-
-        $filename = str_replace(' ', '_', strtoupper(config('elections.cme.' . $this->municipio))) . '_BITACORA_BODEGA_' . time();
-
-
-        return response()->download($file, $filename . '.xlsx', $headers);
-    }
 }
