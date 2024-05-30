@@ -12,13 +12,13 @@ return [
         // GUADALUPE VICTORIA
         '8' => 243,
         // LERDO
-        '12' => 135,
+        '12' => 163,
         // MAPIMÍ
         '13' => 254,
         // PUEBLO NUEVO
         '24' => 152,
         // SANTIAGO PAPASQUIARO
-        '33' => 0,
+        '33' => 264,
     ],
 
     'cme' => [
