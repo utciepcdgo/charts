@@ -47,10 +47,10 @@ class DeliveryToPersonalController extends Controller
             ->join('cargo AS c', 'p.cargo_id', '=', 'c.id')
             ->join('paquetes AS pq', 'ec.paquete_id', '=', 'pq.id')
             ->join('casillas AS ca', 'pq.casilla_id', '=', 'ca.id')
+            ->orderBy('ec.fecha', 'asc')
             ->orderBy('ca.seccion')
             ->orderByRaw('LENGTH(casilla) ASC')
             ->orderByRaw('ca.casilla')
-            ->orderBy('ec.fecha')
             ->get();
 
         $faltantes = DB::Connection($this->database)->table('casillas AS ca')->select('ca.seccion', 'ca.casilla', 'ca.cat_distrito_id', 'm.municipio')
@@ -75,20 +75,13 @@ class DeliveryToPersonalController extends Controller
         // return $faltantes->count();
 
         foreach ($entregas as $key => $entrega) {
-            $pentrega = DB::Connection($this->database)->table('users')->select('roles.name as role')
-                ->join('model_has_roles', function ($join) {
-                    $join->on('users.id', '=', 'model_has_roles.model_id')
-                        ->where('model_has_roles.model_type', User::class);
-                })
-                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->where('users.id', '=', $entrega->entrega_id)->get()->first();
             $entrega->fecha = Carbon::make($entrega->fecha);
             $sheet_1->setCellValue('A5', $entrega->fecha->format('Y-m-d'));
             $sheet_1->setCellValue('B5', $entrega->fecha->format('H:i:s'));
             $sheet_1->setCellValue('C5', $entrega->seccion);
             $sheet_1->setCellValue('D5', $entrega->casilla);
-            $sheet_1->setCellValue('E5', $entrega->entreganombre . $entrega->entregaapellido);
-            $sheet_1->setCellValue('F5', $pentrega->role);
+            $sheet_1->setCellValue('E5', $entrega->entreganombre . " " . $entrega->entregaapellido);
+            $sheet_1->setCellValue('F5', "Entrega");
             $sheet_1->setCellValue('G5', $entrega->recibenombre);
             $sheet_1->setCellValue('H5', $entrega->cargo);
 
@@ -123,38 +116,9 @@ class DeliveryToPersonalController extends Controller
             'Content-Type: application/vnd.ms-excel',
         );
 
-
         $filename = "BitacoraEntregasCAE.xlsx";
-//
-//
+
         return response()->download($file, $filename . '.xlsx', $headers);
 
-//        Storage::disk('public')->putFileAS('/BODEGA', $file, $filename . '.xlsx');
-
-//        Download file
-//        $writer = new Writer($spreadsheet);
-//        $response =  new StreamedResponse(
-//            function () use ($writer) {
-//                $writer->save('php://output');
-//            }
-//        );
-//        $response->headers->set('Content-Type', 'application/vnd.ms-excel');
-//        $response->headers->set('Content-Disposition', 'attachment;filename="'.preg_replace('/[^a-z]/', "", strtolower($municipioName)).'_entregascae_'.time().'.xlsx"');
-//        $response->headers->set('Cache-Control', 'max-age=0');
-//
-//        dd($response);
-//
-//        return $response;
-
-//        $writer = new Xlsx($spreadsheet);
-//        $writer->save('php://output');
-//
-//
-//        $response = new BinaryFileResponse('php://output');
-//        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet_1');
-//        $response->setContentDisposition('attachment', 'nombre_archivo.xlsx');
-
-// Enviar la respuesta
-//        return $response;
     }
 }

@@ -47,6 +47,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 });
 
 // Route group for Excel export
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->prefix('export')->group(function () {
+Route::prefix('export')->group(function () {
    Route::get('/bodega', [App\Http\Controllers\Reports\DeliveryToPersonalController::class, 'DeliveryLog'])->name('export.bodega');
 });
