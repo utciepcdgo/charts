@@ -19,6 +19,7 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
+        "@tabler/icons-vue": "^3.5.0",
         "apexcharts": "^3.48.0",
         "flowbite": "^2.3.0",
         "laravel-echo": "^1.16.1",

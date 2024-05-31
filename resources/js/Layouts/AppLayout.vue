@@ -7,31 +7,17 @@ import NavLink from '@/Components/NavLink.vue';
 import {useLoading} from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css';
 import {
-    initAccordions,
-    initCarousels,
-    initCollapses,
-    initDials,
-    initDismisses,
     initDrawers,
     initDropdowns,
     initModals,
-    initPopovers,
-    initTabs,
-    initTooltips
+
 } from 'flowbite';
+import SidebarLinks from "@/Components/SidebarLinks.vue";
 
 onMounted(() => {
-    initAccordions();
-    initCarousels();
-    initCollapses();
-    initDials();
-    initDismisses();
     initDrawers();
     initDropdowns();
     initModals();
-    initPopovers();
-    initTabs();
-    initTooltips();
 })
 
 defineProps({
@@ -46,7 +32,6 @@ const $loading = useLoading({
     color: "#7723ec",
 });
 
-const showingNavigationDropdown = ref(false);
 const page = usePage()
 const municipio_id = computed(() => page.props.municipio_id)
 
@@ -77,6 +62,7 @@ const request = () => {
         loader.hide();
     });
 }
+
 
 const logout = () => {
     router.post(route('logout'));
@@ -158,110 +144,7 @@ const logout = () => {
                    class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
                    aria-label="Sidebar">
                 <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-                    <ul class="space-y-2 font-medium">
-                        <!--                        <li>-->
-                        <!--                            <NavLink :href="route('dashboard')" :active="route().current('dashboard')">-->
-                        <!--                                <svg-->
-                        <!--                                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"-->
-                        <!--                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"-->
-                        <!--                                    viewBox="0 0 22 21">-->
-                        <!--                                    <path-->
-                        <!--                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>-->
-                        <!--                                    <path-->
-                        <!--                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>-->
-                        <!--                                </svg>-->
-                        <!--                                <span class="ms-3">Dashboard</span>-->
-                        <!--                            </NavLink>-->
-                        <!--                        </li>-->
-                        <li>
-                            <NavLink :href="route('stats.durango')" :active="route().current('stats.durango')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 3v5m4 4h5"/>
-                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                </svg>
-                                <span class="ms-3">Durango</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink :href="route('stats.santiago')" :active="route().current('stats.santiago')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 3v5m4 4h5"/>
-                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                </svg>
-                                <span class="ms-3">Santiago Papasquiaro</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink :href="route('stats.guadalupe')" :active="route().current('stats.guadalupe')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 3v5m4 4h5"/>
-                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                </svg>
-                                <span class="ms-3">Guadalupe Victoria</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink :href="route('stats.mapimi')" :active="route().current('stats.mapimi')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 3v5m4 4h5"/>
-                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                </svg>
-                                <span class="ms-3">Mapimí</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink :href="route('stats.gomez')" :active="route().current('stats.gomez')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 3v5m4 4h5"/>
-                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                </svg>
-                                <span class="ms-3">Gómez Palacio</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink :href="route('stats.lerdo')" :active="route().current('stats.lerdo')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 3v5m4 4h5"/>
-                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                </svg>
-                                <span class="ms-3">Lerdo</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink :href="route('stats.cuencame')" :active="route().current('stats.cuencame')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 3v5m4 4h5"/>
-                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                </svg>
-                                <span class="ms-3">Cuencamé</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink :href="route('stats.pueblonuevo')" :active="route().current('stats.pueblonuevo')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-donut-2">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 3v5m4 4h5"/>
-                                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                </svg>
-                                <span class="ms-3">Pueblo Nuevo</span>
-                            </NavLink>
-                        </li>
-                    </ul>
+                    <SidebarLinks/>
                 </div>
             </aside>
 
@@ -284,17 +167,25 @@ const logout = () => {
                         <div :key="municipio_id">
                             <slot/>
                         </div>
-                        <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Formatos descargables.</h5>
+                        <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Formatos
+                            descargables.</h5>
                         <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-3 gap-4 mb-4 mt-5">
-                            <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                            <div
+                                class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                 <div class="flex items-center space-x-4">
                                     <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
-                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Bitácora de entrega de Documentación Electoral.</h5>
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        Bitácora de entrega de Documentación Electoral.</h5>
                                 </div>
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene los detalles de las entregas realizadas a los CAEL/SEL sobre la Documentación Electoral.</p>
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene los
+                                    detalles de las entregas realizadas a los CAEL/SEL sobre la Documentación
+                                    Electoral.</p>
                                 <div class="flex justify-end">
-                                    <Link @click="request" class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <Link @click="request"
+                                          class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>
                                             <path d="M13 16h-7a2 2 0 0 0 -2 2"/>
@@ -305,43 +196,51 @@ const logout = () => {
                                     </Link>
                                 </div>
                             </div>
-                            <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                            <div
+                                class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                 <div class="flex items-center space-x-4">
                                     <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
-                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Bitácora de Entrada/Salida de Bodega Electoral.</h5>
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        Bitácora de Entrada/Salida de Bodega Electoral.</h5>
                                 </div>
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene las entradas y salidas de paquetes de la Bodega Electoral, mismo que especifica la hora, motivo de entrada/salida y el paquete correspondiente.</p>
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene las
+                                    entradas y salidas de paquetes de la Bodega Electoral, mismo que especifica la hora,
+                                    motivo de entrada/salida y el paquete correspondiente.</p>
                                 <div class="flex justify-end">
-<!--                                    <Link @click="alert('Recurso no disponible')"  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
-<!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
-<!--                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>-->
-<!--                                            <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>-->
-<!--                                            <path d="M13 16h-7a2 2 0 0 0 -2 2"/>-->
-<!--                                            <path d="M15 19l3 3l3 -3"/>-->
-<!--                                            <path d="M18 22v-9"/>-->
-<!--                                        </svg>-->
-<!--                                        <span>Descargar</span>-->
-<!--                                    </Link>-->
+                                    <!--                                    <Link @click="alert('Recurso no disponible')"  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
+                                    <!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
+                                    <!--                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>-->
+                                    <!--                                            <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>-->
+                                    <!--                                            <path d="M13 16h-7a2 2 0 0 0 -2 2"/>-->
+                                    <!--                                            <path d="M15 19l3 3l3 -3"/>-->
+                                    <!--                                            <path d="M18 22v-9"/>-->
+                                    <!--                                        </svg>-->
+                                    <!--                                        <span>Descargar</span>-->
+                                    <!--                                    </Link>-->
                                     <span class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
                                 </div>
                             </div>
-                            <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                            <div
+                                class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                 <div class="flex items-center space-x-4">
                                     <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
-                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Resultados Preliminares.</h5>
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        Resultados Preliminares.</h5>
                                 </div>
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Resultados de los Partidos Políticos y Coaliciones Electorales en desglose por sección y casilla por el Principio de Mayoría Relativa y Representación Proporcional.</p>
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Resultados de los Partidos
+                                    Políticos y Coaliciones Electorales en desglose por sección y casilla por el
+                                    Principio de Mayoría Relativa y Representación Proporcional.</p>
                                 <div class="flex justify-end">
-<!--                                    <Link @click="alert('Recurso no disponible')"  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
-<!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
-<!--                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>-->
-<!--                                            <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>-->
-<!--                                            <path d="M13 16h-7a2 2 0 0 0 -2 2"/>-->
-<!--                                            <path d="M15 19l3 3l3 -3"/>-->
-<!--                                            <path d="M18 22v-9"/>-->
-<!--                                        </svg>-->
-<!--                                        <span>Descargar</span>-->
-<!--                                    </Link>-->
+                                    <!--                                    <Link @click="alert('Recurso no disponible')"  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
+                                    <!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
+                                    <!--                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>-->
+                                    <!--                                            <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>-->
+                                    <!--                                            <path d="M13 16h-7a2 2 0 0 0 -2 2"/>-->
+                                    <!--                                            <path d="M15 19l3 3l3 -3"/>-->
+                                    <!--                                            <path d="M18 22v-9"/>-->
+                                    <!--                                        </svg>-->
+                                    <!--                                        <span>Descargar</span>-->
+                                    <!--                                    </Link>-->
                                     <span class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
                                 </div>
                             </div>
