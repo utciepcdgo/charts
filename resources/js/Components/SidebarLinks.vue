@@ -1,6 +1,4 @@
 <script setup>
-
-import NavLink from "@/Components/NavLink.vue";
 import SidebarLinkItem from "@/Components/Modules/SidebarLinkItem.vue";
 
 const municipalities = [
@@ -19,7 +17,7 @@ const municipalities = [
 
 <template>
     <ul class="space-y-4 font-medium" v-for="municipality in municipalities" :key="municipality.id">
-        <li class="mb-2">
+        <li class="mb-2" @click.stop>
             <SidebarLinkItem :to="municipality.route" :districtName="municipality.name" :key="municipality.id"/>
         </li>
     </ul>

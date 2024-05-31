@@ -96,42 +96,42 @@ class DatabaseSeeder extends Seeder
             [
                 "name" => "Mtro. César Gerardo Victorino Venegas",
                 "email" => "cesar.victorino@iepcdurango.mx",
-                "password" => bcrypt("rzmX5N3b")
+                "password" => "rzmX5N3b"
             ],
             [
                 "name" => "Ing. Emmanuel Iván de la Cruz",
                 "email" => "emmanuel.delacruz@iepcdurango.mx",
-                "password" => bcrypt("qhX7xrvm")
+                "password" => "qhX7xrvm"
             ],
             [
                 "name" => "Lic. David Alonso Arámbula Quiñones",
                 "email" => "david.arambula@iepcdurango.mx",
-                "password" => bcrypt("BP7VdzWu")
+                "password" => "BP7VdzWu"
             ],
             [
                 "name" => "Lic. Ernesto Saucedo Ruíz",
                 "email" => "ernesto.saucedo@iepcdurango.mx",
-                "password" => bcrypt("78TSbWUX")
+                "password" => "78TSbWUX"
             ],
             [
                 "name" => "Lic. Perla Lucero Arreola Escobedo",
                 "email" => "perla.arreola@iepcdurango.mx",
-                "password" => bcrypt("4e2c5Hzt")
+                "password" => "4e2c5Hzt"
             ],
             [
                 "name" => "Mtra. María Cristina de Guadalupe Campos Zavala",
                 "email" => "cristina.campos@iepcdurango.mx",
-                "password" => bcrypt("k9zBhQdq")
+                "password" => "k9zBhQdq"
             ],
             [
                 "name" => "Mtra. Norma Beatriz Pulido Corral",
                 "email" => "norma.pulido@iepcdurango.mx",
-                "password" => bcrypt("xDRL9TGX")
+                "password" => "xDRL9TGX"
             ],
             [
                 "name" => "Mtro. José Omar Ortega Soria",
                 "email" => "omar.ortega@iepcdurango.mx",
-                "password" => bcrypt("S5bP4kwQ")
+                "password" => "S5bP4kwQ"
             ],
         ];
 
