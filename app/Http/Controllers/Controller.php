@@ -9,6 +9,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
+use League\Csv\Writer;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class Controller extends BaseController
@@ -70,8 +71,6 @@ class Controller extends BaseController
             ->where('ec.deleted_at', null)
             ->whereIn(($this->_isTheWay()[0] == 1 ? 'c.cat_distrito_id' : 'c.cat_municipio_id'), $this->_isTheWay()[1])
             ->get();
-
-//        dd($packets_x);
 
         // PROGRESS
         $packets_progress = number_format((($packets_x->count() / $this->casillas) * 100), 2, '.', ',');

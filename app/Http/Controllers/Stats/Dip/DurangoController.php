@@ -17,12 +17,12 @@ class DurangoController extends Controller
         Inertia::share('municipio_id', 5);
 
         return Inertia::render('Stats/Durango', [
-            'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,
-            'packetsReceived'   =>   parent::_getPacketsReceived()  ->original,
-            'aecRegistration'   =>   parent::_getAECRegistration()  ->original,
+            'materialSupplied' => parent::_getMaterialSupplied()->original,
+            'packetsReceived' => parent::_getPacketsReceived()->original,
+            'aecRegistration' => parent::_getAECRegistration()->original,
             // CÓMPUTOS
-            'collatedPackets'   =>   parent::_getCollatedPackets()  ->original,
-            'recountPackets'    =>   parent::_getRecountPackets()   ->original,
+            'collatedPackets' => parent::_getCollatedPackets()->original,
+            'recountPackets' => parent::_getRecountPackets()->original,
         ]);
     }
 }

@@ -43,9 +43,9 @@ const switchToTeam = (team) => {
     });
 };
 
-const request = () => {
+const getMaterialSuppliedLog = () => {
     const loader = $loading.show({});
-    axios.get('/export/bodega/', {
+    axios.get('/export/material-supplied/', {
         params: {
             municipio_id: municipio_id.value
         },
@@ -63,6 +63,25 @@ const request = () => {
     });
 }
 
+const getAECRecordsLog = () => {
+    const loader = $loading.show();
+    axios.get('/export/aec-records/', {
+        params: {
+            municipio_id: municipio_id.value
+        },
+        responseType: 'blob'
+    }).then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'bitacora-recepcion-' + municipio_id.value + '_' + Date.now() + '.csv');
+        document.body.appendChild(link);
+        link.click();
+
+    }).then(() => {
+        loader.hide();
+    });
+}
 
 const logout = () => {
     router.post(route('logout'));
@@ -161,19 +180,24 @@ const logout = () => {
                     <Transition mode="out-in" name="page">
                         <div :key="$page.url">
                             <slot/>
-                            <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Formatos descargables.</h5>
+                            <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Formatos
+                                descargables.</h5>
                             <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-3 gap-4 mb-4 mt-5">
-                                <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                <div
+                                    class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                     <div class="flex items-center space-x-4">
-                                        <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
+                                        <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel"
+                                             width="60">
                                         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                                             Bitácora de entrega de Documentación Electoral.</h5>
                                     </div>
-                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene los
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene
+                                        los
                                         detalles de las entregas realizadas a los CAEL/SEL sobre la Documentación
                                         Electoral.</p>
                                     <div class="flex justify-end">
-                                        <Link @click="request" class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <Link @click="getMaterialSuppliedLog"
+                                              class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                  stroke-linecap="round" stroke-linejoin="round">
@@ -190,11 +214,15 @@ const logout = () => {
                                 <div
                                     class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                     <div class="flex items-center space-x-4">
-                                        <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
-                                        <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Bitácora de Entrada/Salida de Bodega Electoral.</h5>
+                                        <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel"
+                                             width="60">
+                                        <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                            Bitácora de Entrada/Salida de Bodega Electoral.</h5>
                                     </div>
-                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene las
-                                        entradas y salidas de paquetes de la Bodega Electoral, mismo que especifica la hora,
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene
+                                        las
+                                        entradas y salidas de paquetes de la Bodega Electoral, mismo que especifica la
+                                        hora,
                                         motivo de entrada/salida y el paquete correspondiente.</p>
                                     <div class="flex justify-end">
                                         <!--                                    <Link @click="alert('Recurso no disponible')"  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
@@ -207,17 +235,49 @@ const logout = () => {
                                         <!--                                        </svg>-->
                                         <!--                                        <span>Descargar</span>-->
                                         <!--                                    </Link>-->
-                                        <span class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
+                                        <span
+                                            class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
                                     </div>
                                 </div>
                                 <div
                                     class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                     <div class="flex items-center space-x-4">
-                                        <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
+                                        <img src="../../images/icons/Files_23.svg" alt="Icono de archivo Excel"
+                                             width="60">
+                                        <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                            Bitácora de recepción de Paquetes Electorales</h5>
+                                    </div>
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Registros
+                                        correspondientes a la recepción de los paquetes electorales que contienen la
+                                        documentación electoral utilizada en las casillas.</p>
+                                    <div class="flex justify-end">
+                                        <!--                                        <Link @click="getAECRecordsLog"-->
+                                        <!--                                              class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
+                                        <!--                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"-->
+                                        <!--                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"-->
+                                        <!--                                                 stroke-linecap="round" stroke-linejoin="round">-->
+                                        <!--                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>-->
+                                        <!--                                                <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>-->
+                                        <!--                                                <path d="M13 16h-7a2 2 0 0 0 -2 2"/>-->
+                                        <!--                                                <path d="M15 19l3 3l3 -3"/>-->
+                                        <!--                                                <path d="M18 22v-9"/>-->
+                                        <!--                                            </svg>-->
+                                        <!--                                            <span>Descargar</span>-->
+                                        <!--                                        </Link>-->
+                                        <span
+                                            class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                    <div class="flex items-center space-x-4">
+                                        <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel"
+                                             width="60">
                                         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                                             Resultados Preliminares.</h5>
                                     </div>
-                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Resultados de los Partidos
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Resultados de los
+                                        Partidos
                                         Políticos y Coaliciones Electorales en desglose por sección y casilla por el
                                         Principio de Mayoría Relativa y Representación Proporcional.</p>
                                     <div class="flex justify-end">
@@ -231,7 +291,8 @@ const logout = () => {
                                         <!--                                        </svg>-->
                                         <!--                                        <span>Descargar</span>-->
                                         <!--                                    </Link>-->
-                                        <span class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
+                                        <span
+                                            class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
                                     </div>
                                 </div>
                             </div>

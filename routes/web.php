@@ -48,5 +48,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 // Route group for Excel export
 Route::prefix('export')->group(function () {
-   Route::get('/bodega', [App\Http\Controllers\Reports\DeliveryToPersonalController::class, 'DeliveryLog'])->name('export.bodega');
+   Route::get('/material-supplied', [App\Http\Controllers\Reports\DeliveryToPersonalController::class, 'DeliveryLog'])->name('export.bodega');
+   Route::get('/aec-records', [App\Http\Controllers\Reports\AECRecordsController::class, '_getAECRegistrationCSV'])->name('export.aec');
 });
