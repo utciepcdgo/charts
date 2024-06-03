@@ -4,21 +4,45 @@ return [
 
     'aec' => [
         // CUENCAMÉ
-        '4' => 209,
+        '4' => [
+            'recepcion' => 209,
+            'registro' => 209
+        ],
         // DURANGO
-        '5' => 861,
+        '5' => [
+            'recepcion' => 861,
+            'registro' => 861
+        ],
         // GÓMEZ PALACIO
-        '7' => 472,
+        '7' => [
+            'recepcion' => 472,
+            'registro' => 475
+        ],
         // GUADALUPE VICTORIA
-        '8' => 243,
+        '8' => [
+            'recepcion' => 243,
+            'registro' => 243
+        ],
         // LERDO
-        '12' => 163,
+        '12' => [
+            'recepcion' => 163,
+            'registro' => 163
+        ],
         // MAPIMÍ
-        '13' => 254,
+        '13' => [
+            'recepcion' => 254,
+            'registro' => 254
+        ],
         // PUEBLO NUEVO
-        '24' => 152,
+        '24' => [
+            'recepcion' => 152,
+            'registro' => 152
+        ],
         // SANTIAGO PAPASQUIARO
-        '33' => 264,
+        '33' => [
+            'recepcion' => 264,
+            'registro' => 264
+        ],
     ],
 
     'cme' => [
