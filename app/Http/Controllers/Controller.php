@@ -101,15 +101,49 @@ class Controller extends BaseController
 
     public function _getCollatedPackets(): jsonResponse
     {
+        $collated_x = DB::Connection($this->database)->table('rc_actas AS ac')->select('ac.id')
+            ->join('recepciones AS r', 'ac.recepcion_id', '=', 'r.id')
+            ->join('paquetes AS p', 'r.paquete_id', '=', 'p.id')
+            ->where('ac.recuento_cotejo', '=', 'c')
+            ->where('p.eleccion_id', 3)
+            ->where('ac.status', 1)
+            ->where('ac.captura', 1)
+            ->count();
+
+        $collated_y = DB::Connection($this->database)->table('rc_actas AS ac')->select('ac.id')
+            ->join('recepciones AS r', 'ac.recepcion_id', '=', 'r.id')
+            ->join('paquetes AS p', 'r.paquete_id', '=', 'p.id')
+            ->where('ac.recuento_cotejo', '=', 'c')
+            ->where('p.eleccion_id', 3)
+            ->where('ac.status', 1)
+            ->count();
+
         return response()->json(array("series" =>
-            array("received" => 95, "expected" => 100, "progress" => 72)
+            array("received" => $collated_x, "expected" => $collated_y, "progress" => 0)
         ));
     }
 
     public function _getRecountPackets(): jsonResponse
     {
+        $recount_x = DB::Connection($this->database)->table('rc_actas AS ac')->select('ac.id')
+            ->join('recepciones AS r', 'ac.recepcion_id', '=', 'r.id')
+            ->join('paquetes AS p', 'r.paquete_id', '=', 'p.id')
+            ->where('ac.recuento_cotejo', '=', 'r')
+            ->where('p.eleccion_id', 3)
+            ->where('ac.status', 1)
+            ->where('ac.captura', 1)
+            ->count();
+
+        $recount_y = DB::Connection($this->database)->table('rc_actas AS ac')->select('ac.id')
+            ->join('recepciones AS r', 'ac.recepcion_id', '=', 'r.id')
+            ->join('paquetes AS p', 'r.paquete_id', '=', 'p.id')
+            ->where('ac.recuento_cotejo', '=', 'r')
+            ->where('p.eleccion_id', 3)
+            ->where('ac.status', 1)
+            ->count();
+
         return response()->json(array("series" =>
-            array("received" => 95, "expected" => 100, "progress" => 72)
+            array("received" => $recount_x, "expected" => $recount_y, "progress" => 72)
         ));
     }
 
