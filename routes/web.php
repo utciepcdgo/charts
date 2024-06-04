@@ -43,7 +43,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/gomezpalacio', [App\Http\Controllers\Stats\Dip\GomezPalacioController::class, 'index'])->name('stats.gomez');
     Route::get('/lerdo', [App\Http\Controllers\Stats\Dip\LerdoController::class, 'index'])->name('stats.lerdo');
     Route::get('/cuencame', [App\Http\Controllers\Stats\Dip\CuencameController::class, 'index'])->name('stats.cuencame');
-    Route::get('/purblonuevo', [App\Http\Controllers\Stats\Dip\PuebloNuevoController::class, 'index'])->name('stats.pueblonuevo');
+    Route::get('/pueblonuevo', [App\Http\Controllers\Stats\Dip\PuebloNuevoController::class, 'index'])->name('stats.pueblonuevo');
 });
 
 // Route group for Excel export

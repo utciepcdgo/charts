@@ -17,6 +17,10 @@ class CuencameController extends Controller
     {
         Inertia::share('municipio_id', 4);
 
+        $preliminary_results_links = [
+            'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d14-resultados-preliminares_1717464263.xlsx',
+        ];
+
         return Inertia::render('Stats/Cuencame', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,
             'packetsReceived'   =>   parent::_getPacketsReceived()  ->original,
@@ -24,6 +28,8 @@ class CuencameController extends Controller
             // CÓMPUTOS
             'collatedPackets'   =>   parent::_getCollatedPackets()  ->original,
             'recountPackets'    =>   parent::_getRecountPackets()   ->original,
+            // DOWNLOADS
+            'preliminaryResults' => $preliminary_results_links,
         ]);
     }
 }

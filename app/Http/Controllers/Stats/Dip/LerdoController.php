@@ -16,6 +16,10 @@ class LerdoController extends Controller
     {
         Inertia::share('municipio_id', 12);
 
+        $preliminary_results_links = [
+            'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d13-resultados-preliminares_1717464107.xlsx'
+        ];
+
         return Inertia::render('Stats/Lerdo', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,
             'packetsReceived'   =>   parent::_getPacketsReceived()  ->original,
@@ -23,6 +27,8 @@ class LerdoController extends Controller
             // CÓMPUTOS
             'collatedPackets'   =>   parent::_getCollatedPackets()  ->original,
             'recountPackets'    =>   parent::_getRecountPackets()   ->original,
+            // DOWNLOADS
+            'preliminaryResults' => $preliminary_results_links,
         ]);
     }
 }
