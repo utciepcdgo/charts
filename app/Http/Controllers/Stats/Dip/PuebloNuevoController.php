@@ -20,7 +20,7 @@ class PuebloNuevoController extends Controller
             [
                 'id' => 1,
                 'district' => '15',
-                'url' => 'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d15-resultados-preliminares_1717463980.xlsx'
+                'url' => 'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d15-resultados-preliminares_1717524391.xlsx'
             ],
         );
 
