@@ -19,6 +19,7 @@ class SantiagoPapasquiaroController extends Controller
         $preliminary_results_links = [
             [
                 'id' => 1,
+                'district' => '07',
                 'url' => 'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d07-resultados-preliminares_1717465800.xlsx'
             ]
         ];

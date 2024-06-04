@@ -17,9 +17,21 @@ class GomezPalacioController extends Controller
         Inertia::share('municipio_id', 7);
 
         $preliminary_results_links = [
-            'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d10-resultados-preliminares_1717458939.xlsx',
-            'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d11-resultados-preliminares_1717458951.xlsx',
-            'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d12-resultados-preliminares_1717459017.xlsx'
+            [
+                'id' => 1,
+                'district' => '10',
+                'url' => 'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d10-resultados-preliminares_1717458939.xlsx',
+            ],
+            [
+                'id' => 2,
+                'district' => '11',
+                'url' => 'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d11-resultados-preliminares_1717458951.xlsx',
+            ],
+            [
+                'id' => 3,
+                'district' => '12',
+                'url' => 'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d12-resultados-preliminares_1717459017.xlsx'
+            ]
         ];
 
         return Inertia::render('Stats/GomezPalacio', [
@@ -30,7 +42,7 @@ class GomezPalacioController extends Controller
             'collatedPackets' => parent::_getCollatedPackets()->original,
             'recountPackets' => parent::_getRecountPackets()->original,
              // DOWNLOADS
-            'preliminaryResults' => $preliminary_results_links,
+            'preliminaryResults' => json_encode($preliminary_results_links, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE),
         ]);
     }
 }

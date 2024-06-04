@@ -14,6 +14,7 @@ import {
 } from 'flowbite';
 import SidebarLinks from "@/Components/SidebarLinks.vue";
 
+
 onMounted(() => {
     initDrawers();
     initDropdowns();
@@ -23,7 +24,9 @@ onMounted(() => {
 defineProps({
     title: String,
     municipio_id: String,
-    preliminaryResults: Object
+    preliminaryResults: {
+        type: Object
+    }
 });
 
 const $loading = useLoading({
@@ -34,8 +37,9 @@ const $loading = useLoading({
 });
 
 const page = usePage()
+
 const municipio_id = computed(() => page.props.municipio_id)
-const preliminaryResults = computed(() => page.props.preliminaryResults)
+const preliminaryResults = computed(() => JSON.parse(page.props.preliminaryResults))
 
 const switchToTeam = (team) => {
     router.put(route('current-team.update'), {
@@ -280,7 +284,34 @@ const logout = () => {
                                         Partidos
                                         Políticos y Coaliciones Electorales en desglose por sección y casilla por el
                                         Principio de Mayoría Relativa y Representación Proporcional.</p>
-                                    <div class="flex justify-end" v-for="">
+
+                                    <div class="flex justify-end">
+                                        <button id="dropdown" data-dropdown-toggle="dropdownPreliminaryResults" class="text-purple-600 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                            Descargar
+                                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                            </svg>
+                                        </button>
+
+                                        <!-- Dropdown menu -->
+                                        <div id="dropdownPreliminaryResults" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownPreliminaryResults" v-for="resource in preliminaryResults" :key="resource.id">
+                                                <li>
+                                                    <a :href="resource.url" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex space-x-2 items-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-xls">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                            <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                                                            <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4"/>
+                                                            <path d="M4 15l4 6"/>
+                                                            <path d="M4 21l4 -6"/>
+                                                            <path d="M17 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75"/>
+                                                            <path d="M11 15v6h3"/>
+                                                        </svg>
+                                                        <span>Distrito {{ resource.district }}</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -288,7 +319,6 @@ const logout = () => {
                     </Transition>
                 </div>
             </main>
-
         </div>
     </div>
 </template>

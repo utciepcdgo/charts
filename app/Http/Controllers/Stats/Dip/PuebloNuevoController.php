@@ -16,12 +16,14 @@ class PuebloNuevoController extends Controller
     {
         Inertia::share('municipio_id', 24);
 
-        $preliminary_results_links = [
+        $preliminary_results_links = array(
             [
                 'id' => 1,
+                'district' => '15',
                 'url' => 'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d15-resultados-preliminares_1717463980.xlsx'
             ],
-        ];
+        );
+
 
         return Inertia::render('Stats/PuebloNuevo', [
             'materialSupplied'  =>   parent::_getMaterialSupplied() ->original,
@@ -31,7 +33,7 @@ class PuebloNuevoController extends Controller
             'collatedPackets'   =>   parent::_getCollatedPackets()  ->original,
             'recountPackets'    =>   parent::_getRecountPackets()   ->original,
             // DOWNLOADS
-            'preliminaryResults' => json_encode($preliminary_results_links, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE),
+            'preliminaryResults' => json_encode($preliminary_results_links, true),
         ]);
     }
 }

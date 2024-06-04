@@ -17,7 +17,11 @@ class MapimiController extends Controller
         Inertia::share('municipio_id', 13);
 
          $preliminary_results_links = [
-            'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d09-resultados-preliminares_1717464608.xlsx'
+            [
+                'id' => 1,
+                'district' => '09',
+                'url' => 'https://s3.amazonaws.com/static-test.appsiepcdurango.mx/formatos/preliminares/d09-resultados-preliminares_1717464608.xlsx'
+            ]
         ];
 
         return Inertia::render('Stats/Mapimi', [
@@ -28,7 +32,7 @@ class MapimiController extends Controller
             'collatedPackets'   =>   parent::_getCollatedPackets()  ->original,
             'recountPackets'    =>   parent::_getRecountPackets()   ->original,
             // DOWNLOADS
-            'preliminaryResults' => $preliminary_results_links,
+            'preliminaryResults' => json_encode($preliminary_results_links, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         ]);
     }
 }
