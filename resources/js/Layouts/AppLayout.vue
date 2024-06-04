@@ -264,8 +264,6 @@ const logout = () => {
                                             </svg>
                                             <span>Descargar</span>
                                         </Link>
-                                        <span
-                                            class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
                                     </div>
                                 </div>
                                 <div

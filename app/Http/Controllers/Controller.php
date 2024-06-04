@@ -22,7 +22,7 @@ class Controller extends BaseController
 
     public function __construct($municipio = 5)
     {
-        $this->casillas = config('elections.aec.' . $municipio);
+        $this->casillas = config('elections.aec.' . $municipio . '.recepcion');
         $this->municipio = $municipio;
         $this->database = 'sice_' . str_pad($municipio, 2, '0', STR_PAD_LEFT);
     }
@@ -92,10 +92,10 @@ class Controller extends BaseController
             ->count();
 
         // PROGRESS
-        $registrations_progress = number_format((($registrations_x / $this->casillas) * 100), 2, '.', ',');
+        $registrations_progress = number_format((($registrations_x / config('elections.aec.' . $this->municipio . '.registro')) * 100), 2, '.', ',');
 
         return response()->json(array("series" =>
-            array("received" => $registrations_x, "expected" => config('elections.aec.' . $this->municipio), "progress" => $registrations_progress)
+            array("received" => $registrations_x, "expected" => config('elections.aec.' . $this->municipio . '.registro'), "progress" => $registrations_progress)
         ));
     }
 
