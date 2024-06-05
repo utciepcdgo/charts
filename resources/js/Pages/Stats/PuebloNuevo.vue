@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import AppLayout from '@/Layouts/AppLayout.vue';
 import GaugeChart from "@/Components/Charts/GaugeChart.vue";
+import Files from '@/Functions/Files.js';
 </script>
 
 <script lang="ts">
+import {Link} from '@inertiajs/vue3';
 import CircleChart from "@/Components/Charts/CircleChart.vue";
 import type {PropType} from 'vue'
 import ApexCharts from "vue3-apexcharts";
@@ -41,6 +43,10 @@ export default {
             type: Object as PropType<Chart>,
             required: true
         },
+        getCollatedRecountPacketsList: {
+            type: Function as PropType<Function>,
+            required: true
+        },
     },
 }
 
@@ -65,8 +71,8 @@ export default {
                         <p class="font-medium text-gray-400">{{ materialSupplied.series.received }} de
                             {{ materialSupplied.series.expected }}</p>
                     </div>
-                    <circle-chart ref="msc" :series="[materialSupplied.series.progress]" :width="300"
-                                  :key="2"></circle-chart>
+                    <CircleChart ref="msc" :series="[materialSupplied.series.progress]" :width="300"
+                                  :key="2"></CircleChart>
                 </div>
                 <div
                     class="flex flex-col w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
@@ -75,7 +81,7 @@ export default {
                         <p class="font-medium text-gray-400">{{ packetsReceived.series.received }} de
                             {{ packetsReceived.series.expected }}</p>
                     </div>
-                    <circle-chart :series="[packetsReceived.series.progress]" :width="300" :key="1"></circle-chart>
+                    <CircleChart :series="[packetsReceived.series.progress]" :width="300" :key="1"></CircleChart>
                 </div>
                 <div
                     class="flex flex-col w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
@@ -84,7 +90,7 @@ export default {
                         <p class="font-medium text-gray-400">{{ aecRegistration.series.received }} de
                             {{ aecRegistration.series.expected }}</p>
                     </div>
-                    <circle-chart :series="[aecRegistration.series.progress]" :width="300" :key="3"></circle-chart>
+                    <CircleChart :series="[aecRegistration.series.progress]" :width="300" :key="3"></CircleChart>
                 </div>
             </div>
             <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Cómputos Electorales.</h5>
@@ -97,13 +103,11 @@ export default {
                             <img src="../../../images/icons/Files_23.svg" alt="Icono de archivo Excel"
                                  width="60">
                             <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                Bitácora de recepción de Paquetes Electorales</h5>
+                                Listado de Casillas en Recuento
+                            </h5>
                         </div>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Registros
-                            correspondientes a la recepción de los paquetes electorales que contienen la
-                            documentación electoral utilizada en las casillas.</p>
                         <div class="flex justify-end">
-                            <Link href=""
+                            <Link @click.prevent="Files.getCollatedRecountPacketsList(2)" href="#"
                                   class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -127,13 +131,11 @@ export default {
                             <img src="../../../images/icons/Files_23.svg" alt="Icono de archivo Excel"
                                  width="60">
                             <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                Bitácora de recepción de Paquetes Electorales</h5>
+                                Listado de Casillas en Cotejo
+                            </h5>
                         </div>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Registros
-                            correspondientes a la recepción de los paquetes electorales que contienen la
-                            documentación electoral utilizada en las casillas.</p>
                         <div class="flex justify-end">
-                            <Link href=""
+                            <Link @click.prevent="Files.getCollatedRecountPacketsList(1)" href="#"
                                   class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

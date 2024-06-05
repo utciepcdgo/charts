@@ -27,9 +27,6 @@ class AECRecordsController extends Controller
         $municipio_id = $request->municipio_id;
         $this->database = 'sice_' . str_pad($municipio_id, 2, '0', STR_PAD_LEFT);
 
-        $distritos = DB::Connection($this->database)->table('cat_distritos')->select('distrito')->where('cat_municipio_id', $municipio_id)->get();
-
-
         $registrations_x = DB::Connection($this->database)->table('recepciones AS r')->select('r.id', 'r.paquete_id', 'r.fecha', 'c.seccion', 'c.casilla', 'r.muestra_alteracion', 'r.firmado', 'r.cinta_etiqueta_seguridad', 'r.sobre_prep', 'r.acta_por_fuera', 'p1.nombre AS enombre', 'p2.nombre AS rnombre')
             ->join('personal AS p1', 'r.entrega_id', '=', 'p1.id')
             ->join('personal AS p2', 'r.recibe_id', '=', 'p2.id')
@@ -60,8 +57,8 @@ class AECRecordsController extends Controller
         }
 
         // Return the CSV file.
-        return response()->streamDownload(function () use ($csv) {
-            $csv->output();
-        }, 'aec_registration.csv');
+        return response()->streamDownload(function () use ($csv, $municipioName) {
+            $csv->output(str_replace(' ',  '_', strtoupper($municipioName)) . '_BITACORA_RECEPCION_' . Carbon::now()->format('d-m-Y_H-i-s') . '.csv');
+        });
     }
 }
