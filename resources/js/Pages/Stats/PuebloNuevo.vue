@@ -58,7 +58,6 @@ export default {
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Pueblo Nuevo
             </h2>
-            <!--            <button @click="updateMaterialSupplied">Actualizar</button>-->
         </template>
 
         <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
@@ -72,7 +71,7 @@ export default {
                             {{ materialSupplied.series.expected }}</p>
                     </div>
                     <CircleChart ref="msc" :series="[materialSupplied.series.progress]" :width="300"
-                                  :key="2"></CircleChart>
+                                 :key="2"></CircleChart>
                 </div>
                 <div
                     class="flex flex-col w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
@@ -96,58 +95,60 @@ export default {
             <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Cómputos Electorales.</h5>
             <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 justify-center gap-4 my-10">
                 <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 items-center gap-4 my-10">
-                    <GaugeChart :title="'Recuento'" :series="[recountPackets.series.expected - (recountPackets.series.received), recountPackets.series.received]"/>
+                    <GaugeChart :title="'Recuento'"
+                                :series="[recountPackets.series.expected - (recountPackets.series.received), recountPackets.series.received]"/>
                     <div
                         class="w-full p-6 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex items-center space-x-4">
                             <img src="../../../images/icons/Files_23.svg" alt="Icono de archivo Excel"
                                  width="60">
-                            <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                Listado de Casillas en Recuento
-                            </h5>
-                        </div>
-                        <div class="flex justify-end">
-                            <Link @click.prevent="Files.getCollatedRecountPacketsList(2)" href="#"
-                                  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>
-                                    <path d="M13 16h-7a2 2 0 0 0 -2 2"/>
-                                    <path d="M15 19l3 3l3 -3"/>
-                                    <path d="M18 22v-9"/>
-                                </svg>
-                                <span>Descargar</span>
-                            </Link>
+                            <div class="flex flex-col">
+                                <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    Listado de Casillas en Recuento
+                                </h5>
+                                <Link @click.prevent="Files.getCollatedRecountPacketsList(2)" href="#"
+                                      class="inline-flex space-x-2 items-center text-sm font-medium text-center text-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>
+                                        <path d="M13 16h-7a2 2 0 0 0 -2 2"/>
+                                        <path d="M15 19l3 3l3 -3"/>
+                                        <path d="M18 22v-9"/>
+                                    </svg>
+                                    <span>Descargar</span>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 items-center gap-4 my-10">
-                    <GaugeChart :title="'Cotejo'" :series="[collatedPackets.series.expected - (collatedPackets.series.received), collatedPackets.series.received]"/>
+                    <GaugeChart :title="'Cotejo'"
+                                :series="[collatedPackets.series.expected - (collatedPackets.series.received), collatedPackets.series.received]"/>
                     <div
                         class="w-full p-6 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex items-center space-x-4">
                             <img src="../../../images/icons/Files_23.svg" alt="Icono de archivo Excel"
                                  width="60">
-                            <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                Listado de Casillas en Cotejo
-                            </h5>
-                        </div>
-                        <div class="flex justify-end">
-                            <Link @click.prevent="Files.getCollatedRecountPacketsList(1)" href="#"
-                                  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>
-                                    <path d="M13 16h-7a2 2 0 0 0 -2 2"/>
-                                    <path d="M15 19l3 3l3 -3"/>
-                                    <path d="M18 22v-9"/>
-                                </svg>
-                                <span>Descargar</span>
-                            </Link>
+                            <div class="flex flex-col">
+                                <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    Listado de Casillas en Cotejo
+                                </h5>
+                                <Link @click.prevent="Files.getCollatedRecountPacketsList(1)" href="#"
+                                      class="inline-flex space-x-2 items-center text-sm font-medium text-center text-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>
+                                        <path d="M13 16h-7a2 2 0 0 0 -2 2"/>
+                                        <path d="M15 19l3 3l3 -3"/>
+                                        <path d="M18 22v-9"/>
+                                    </svg>
+                                    <span>Descargar</span>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
