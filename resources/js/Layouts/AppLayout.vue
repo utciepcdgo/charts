@@ -188,7 +188,7 @@ const logout = () => {
                         <div :key="$page.url">
                             <slot/>
                             <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Formatos
-                                descargables de la Jornada Electoral.</h5>
+                                descargables.</h5>
                             <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-3 gap-4 mb-4 mt-5">
                                 <div
                                     class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">

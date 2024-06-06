@@ -1,6 +1,7 @@
 <script lang="ts">
 import {defineComponent, defineExpose} from 'vue'
 import ApexCharts from "vue3-apexcharts";
+import es from 'apexcharts/dist/locales/es.json';
 
 export default defineComponent({
     components: {
@@ -18,6 +19,44 @@ export default defineComponent({
         return {
             id: 7,
             options: {
+                chart: {
+                    width: '100%',
+                    foreColor: '#680bf8',
+                    locales: [es],
+                    defaultLocale: 'es',
+                    toolbar: {
+                        show: true,
+                        offsetX: 0,
+                        offsetY: 0,
+                        tools: {
+                            download: true,
+                            selection: true,
+                            zoom: true,
+                            zoomin: true,
+                            zoomout: true,
+                            pan: true,
+                            customIcons: []
+                        },
+                        export: {
+                            csv: {
+                                filename: this.title,
+                                columnDelimiter: ',',
+                                headerCategory: 'category',
+                                headerValue: 'value',
+                                dateFormatter(timestamp) {
+                                    return new Date(timestamp).toDateString()
+                                }
+                            },
+                            svg: {
+                                filename: this.title,
+                            },
+                            png: {
+                                filename: this.title,
+                            }
+                        },
+                        autoSelected: 'zoom'
+                    },
+                },
                 stroke: {
                     show: false
                 },
