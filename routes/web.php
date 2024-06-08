@@ -30,9 +30,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
 //    Route::get('/dashboard', [App\Http\Controllers\Dashboard\ChartController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard', function () {
-        return redirect()->route('stats.durango');
-    })->name('dashboard');
+    Route::get('/dashboard')->name('dashboard');
 });
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->prefix('stats')->group(function () {

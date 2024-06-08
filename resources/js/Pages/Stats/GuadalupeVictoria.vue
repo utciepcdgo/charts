@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import AppLayout from '@/Layouts/AppLayout.vue';
+import GaugeChart from "@/Components/Charts/GaugeChart.vue";
+import Files from '@/Functions/Files.js';
+import {Link} from '@inertiajs/vue3';
 </script>
 
 <script lang="ts">
@@ -54,6 +57,7 @@ export default {
         </template>
 
         <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+            <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Jornada Electoral.</h5>
             <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-3 gap-4 mb-4">
                 <div
                     class="flex flex-col w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
@@ -62,8 +66,8 @@ export default {
                         <p class="font-medium text-gray-400">{{ materialSupplied.series.received }} de
                             {{ materialSupplied.series.expected }}</p>
                     </div>
-                    <circle-chart ref="msc" :series="[materialSupplied.series.progress]" :width="300"
-                                  :key="2"></circle-chart>
+                    <CircleChart ref="msc" :series="[materialSupplied.series.progress]" :width="300"
+                                 :key="2"></CircleChart>
                 </div>
                 <div
                     class="flex flex-col w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
@@ -72,7 +76,7 @@ export default {
                         <p class="font-medium text-gray-400">{{ packetsReceived.series.received }} de
                             {{ packetsReceived.series.expected }}</p>
                     </div>
-                    <circle-chart :series="[packetsReceived.series.progress]" :width="300" :key="1"></circle-chart>
+                    <CircleChart :series="[packetsReceived.series.progress]" :width="300" :key="1"></CircleChart>
                 </div>
                 <div
                     class="flex flex-col w-full items-center border border-gray-200 px-3 py-2 rounded shadow-lg">
@@ -81,7 +85,68 @@ export default {
                         <p class="font-medium text-gray-400">{{ aecRegistration.series.received }} de
                             {{ aecRegistration.series.expected }}</p>
                     </div>
-                    <circle-chart :series="[aecRegistration.series.progress]" :width="300" :key="3"></circle-chart>
+                    <CircleChart :series="[aecRegistration.series.progress]" :width="300" :key="3"></CircleChart>
+                </div>
+            </div>
+            <!--SECCION 2 - COMPUTOS ELECTORALES-->
+            <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Cómputos Electorales.</h5>
+
+            <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 justify-center gap-4 my-10">
+                <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 items-center gap-4 my-10">
+                    <GaugeChart :title="'Recuento'"
+                                :series="[recountPackets.series.expected - (recountPackets.series.received), recountPackets.series.received]"/>
+                    <div
+                        class="w-full p-6 dark:bg-gray-800 dark:border-gray-700">
+                        <div class="flex items-center space-x-4">
+                            <img src="../../../images/icons/Files_23.svg" alt="Icono de archivo Excel"
+                                 width="60">
+                            <div class="flex flex-col">
+                                <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    Listado de Casillas en Recuento
+                                </h5>
+                                <Link @click.prevent="Files.getCollatedRecountPacketsList(2)" href="#"
+                                      class="inline-flex space-x-2 items-center text-sm font-medium text-center text-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-csv">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                                        <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4"/>
+                                        <path d="M7 16.5a1.5 1.5 0 0 0 -3 0v3a1.5 1.5 0 0 0 3 0"/>
+                                        <path d="M10 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75"/>
+                                        <path d="M16 15l2 6l2 -6"/>
+                                    </svg>
+                                    <span>Descargar</span>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 items-center gap-4 my-10">
+                    <GaugeChart :title="'Cotejo'"
+                                :series="[collatedPackets.series.expected - (collatedPackets.series.received), collatedPackets.series.received]"/>
+                    <div
+                        class="w-full p-6 dark:bg-gray-800 dark:border-gray-700">
+                        <div class="flex items-center space-x-4">
+                            <img src="../../../images/icons/Files_23.svg" alt="Icono de archivo Excel"
+                                 width="60">
+                            <div class="flex flex-col">
+                                <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    Listado de Casillas en Cotejo
+                                </h5>
+                                <Link @click.prevent="Files.getCollatedRecountPacketsList(1)" href="#"
+                                      class="inline-flex space-x-2 items-center text-sm font-medium text-center text-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-csv">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                                        <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4"/>
+                                        <path d="M7 16.5a1.5 1.5 0 0 0 -3 0v3a1.5 1.5 0 0 0 3 0"/>
+                                        <path d="M10 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75"/>
+                                        <path d="M16 15l2 6l2 -6"/>
+                                    </svg>
+                                    <span>Descargar</span>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

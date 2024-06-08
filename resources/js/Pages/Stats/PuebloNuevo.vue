@@ -2,10 +2,10 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import GaugeChart from "@/Components/Charts/GaugeChart.vue";
 import Files from '@/Functions/Files.js';
+import {Link} from '@inertiajs/vue3';
 </script>
 
 <script lang="ts">
-import {Link} from '@inertiajs/vue3';
 import CircleChart from "@/Components/Charts/CircleChart.vue";
 import type {PropType} from 'vue'
 import ApexCharts from "vue3-apexcharts";
@@ -92,7 +92,9 @@ export default {
                     <CircleChart :series="[aecRegistration.series.progress]" :width="300" :key="3"></CircleChart>
                 </div>
             </div>
+            <!--SECCION 2 - COMPUTOS ELECTORALES-->
             <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Cómputos Electorales.</h5>
+
             <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 justify-center gap-4 my-10">
                 <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 items-center gap-4 my-10">
                     <GaugeChart :title="'Recuento'"
