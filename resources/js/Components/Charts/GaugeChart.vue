@@ -72,7 +72,7 @@ export default defineComponent({
                 dataLabels: { // Etiquetas de datos dentro de la gráfica
                     enabled: false,
                 },
-                labels: ['Pendiente', 'Cotejados'],
+                labels: ['Pendiente', 'Realizado'],
                 tooltip: {
                     enabled: true
                 },
