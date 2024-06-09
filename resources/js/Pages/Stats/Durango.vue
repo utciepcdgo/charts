@@ -50,11 +50,8 @@ export default {
     methods: {
         async updateMaterialSupplied() {
             const data = await fetch('/api/material-supplied').then((res) => res.json());
-            // this.$refs.msc.updateSeries(data.series)
-            // console.log(this.$refs.msc.$parent.$emit('update:series', data.series.progress));
-            // this.$refs.msc.(data.series.progress)
         }
-    }
+    },
 }
 
 </script>

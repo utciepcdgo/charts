@@ -37,6 +37,28 @@ export default {
             loader.hide();
         });
     },
+    getWarehouseIO: function () {
+        const loader = $loading.show({});
+        axios.get('/export/warehouse-io/', {
+            params: {
+                municipio_id: usePage().props.municipio_id,
+            },
+            responseType: 'blob'
+        }).then(response => {
+            console.log(response);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            // Getting name from laravel's response header
+            const filename = response.headers.get("content-disposition").split("filename=")[1];
+
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+        }).then(() => {
+            loader.hide();
+        });
+    },
     municipalitiesList: [
         {id: '5', name: 'Durango', route: 'stats.durango'},
         {id: '33', name: 'Santiago Papasquiaro', route: 'stats.santiago'},

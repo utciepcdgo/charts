@@ -26,10 +26,11 @@ class CollateRecountPacketsListController extends Controller
         $municipio_id = $request->municipio_id;
         $this->database = 'sice_' . str_pad($municipio_id, 2, '0', STR_PAD_LEFT);
 
-        $collates_x = DB::Connection($this->database)->table('rc_actas AS rc')->select('c.seccion', 'c.casilla', 'c.cat_distrito_id', "rc.principio")
+        $collates_x = DB::Connection($this->database)->table('rc_actas AS rc')->select('c.seccion', 'c.casilla', 'c.cat_distrito_id', "rc.principio", "ci.causal")
             ->join('recepciones AS r', 'rc.recepcion_id', '=', 'r.id')
             ->join('paquetes AS p', 'r.paquete_id', '=', 'p.id')
             ->join('casillas AS c', 'p.casilla_id', '=', 'c.id')
+            ->join('cat_incidencias AS ci', 'rc.cat_incidencia_id', '=', 'ci.id')
             ->where('recuento_cotejo', '=', $request->type_of_records === "1" ? 'c' : 'r')
             ->where('rc.status', '=', 1)
             ->where('p.eleccion_id', '=', 3)
@@ -47,11 +48,11 @@ class CollateRecountPacketsListController extends Controller
         $csv->addFormatter($encoder);
 
         // Insert the headers.
-        $csv->insertOne(['SECCION', 'CASILLA', 'DISTRITO', 'PRINCIPIO', 'TIPO_ELECCION']);
+        $csv->insertOne(['SECCION', 'CASILLA', 'DISTRITO', "INCIDENCIA", 'PRINCIPIO', 'TIPO_ELECCION']);
 
         // Insert the data.
         foreach ($collates_x as $collate) {
-            $csv->insertOne([$collate->seccion, $collate->casilla, $collate->cat_distrito_id, $collate->principio, "DIPUTACIONES"]);
+            $csv->insertOne([$collate->seccion, $collate->casilla, $collate->cat_distrito_id, $collate->causal, $collate->principio, "DIPUTACIONES"]);
         }
 
         // Return the CSV file.

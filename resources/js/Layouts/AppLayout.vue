@@ -3,7 +3,7 @@ import {computed, defineComponent, onMounted, ref} from 'vue';
 import {Head, Link, router, usePage} from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
-import NavLink from '@/Components/NavLink.vue';
+import Files from '@/Functions/Files.js';
 import {useLoading} from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css';
 import {
@@ -226,24 +226,21 @@ const logout = () => {
                                         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                                             Bitácora de Entrada/Salida de Bodega Electoral.</h5>
                                     </div>
-                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene
-                                        las
-                                        entradas y salidas de paquetes de la Bodega Electoral, mismo que especifica la
-                                        hora,
-                                        motivo de entrada/salida y el paquete correspondiente.</p>
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Formato que contiene las entradas y salidas de paquetes de la Bodega Electoral, mismo que especifica la hora, motivo de entrada/salida y el paquete correspondiente.</p>
                                     <div class="flex justify-end">
-                                        <!--                                    <Link @click="alert('Recurso no disponible')"  class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
-                                        <!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
-                                        <!--                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>-->
-                                        <!--                                            <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>-->
-                                        <!--                                            <path d="M13 16h-7a2 2 0 0 0 -2 2"/>-->
-                                        <!--                                            <path d="M15 19l3 3l3 -3"/>-->
-                                        <!--                                            <path d="M18 22v-9"/>-->
-                                        <!--                                        </svg>-->
-                                        <!--                                        <span>Descargar</span>-->
-                                        <!--                                    </Link>-->
-                                        <span
-                                            class="text-sm text-gray-500">Recurso no disponible por el momento...</span>
+                                        <Link @click="Files.getWarehouseIO()"
+                                              class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                <path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12v5"/>
+                                                <path d="M13 16h-7a2 2 0 0 0 -2 2"/>
+                                                <path d="M15 19l3 3l3 -3"/>
+                                                <path d="M18 22v-9"/>
+                                            </svg>
+                                            <span>Descargar</span>
+                                        </Link>
                                     </div>
                                 </div>
                                 <div
