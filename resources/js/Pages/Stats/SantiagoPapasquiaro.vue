@@ -122,8 +122,7 @@ export default {
                     </div>
                 </div>
                 <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 items-center gap-4 my-10">
-                    <GaugeChart :title="'Cotejo'"
-                                :series="[collatedPackets.series.expected - (collatedPackets.series.received), collatedPackets.series.received]"/>
+                    <GaugeChart :title="'Cotejo'" :series="[collatedPackets.series.expected - (collatedPackets.series.received), collatedPackets.series.received]"/>
                     <div
                         class="w-full p-6 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex items-center space-x-4">

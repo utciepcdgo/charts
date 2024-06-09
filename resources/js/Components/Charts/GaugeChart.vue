@@ -74,7 +74,7 @@ export default defineComponent({
                 },
                 labels: ['Pendiente', 'Cotejados'],
                 tooltip: {
-                    enabled: false
+                    enabled: true
                 },
                 plotOptions: {
                     pie: {
@@ -100,7 +100,7 @@ export default defineComponent({
                                     color: '#37474F',
                                     formatter: function (w) {
                                         return w.globals.seriesTotals.reduce((a, b) => {
-                                            return (b + " de " + (a - b))
+                                            return (b + " de " + (a + b))
                                         })
                                     }
                                 }
