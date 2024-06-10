@@ -115,8 +115,8 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
                     <div class="w-full p-6 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex flex-col justify-start">
 
-                            <div class="block mb-6" v-for="district in recountPackets.series.by_district">
-                                Distrito {{ district.district }}:
+                            <div class="block mb-6 relative" v-for="district in recountPackets.series.by_district">
+                                <span class="absolute">Distrito {{ district.district }}:</span>
                                 <fwb-progress :progress="toFixed((district.progress / district.amount * 100), 2)" size="lg" label-position="outside" label-progress color="purple"/>
                             </div>
 
