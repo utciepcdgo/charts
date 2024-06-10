@@ -6,6 +6,7 @@ import Banner from '@/Components/Banner.vue';
 import Files from '@/Functions/Files.js';
 import {useLoading} from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css';
+import {FinalResultsXLSX} from "@/Functions/FinalResults.js";
 import {
     initDrawers,
     initDropdowns,
@@ -40,6 +41,10 @@ const page = usePage()
 
 const municipio_id = computed(() => page.props.municipio_id)
 const preliminaryResults = computed(() => JSON.parse(page.props.preliminaryResults))
+
+
+// const FinalResultsXLSXbyDistrict = FinalResultsXLSX.filter((x) => x.id === municipio_id);
+const FinalResultsXLSXbyDistrict = FinalResultsXLSX.find(x => x.id === municipio_id.value.toString()).properties
 
 const switchToTeam = (team) => {
     router.put(route('current-team.update'), {
@@ -243,17 +248,13 @@ const logout = () => {
                                         </Link>
                                     </div>
                                 </div>
-                                <div
-                                    class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                     <div class="flex items-center space-x-4">
-                                        <img src="../../images/icons/Files_23.svg" alt="Icono de archivo Excel"
-                                             width="60">
+                                        <img src="../../images/icons/Files_23.svg" alt="Icono de archivo Excel" width="60">
                                         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                                             Bitácora de recepción de Paquetes Electorales</h5>
                                     </div>
-                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Registros
-                                        correspondientes a la recepción de los paquetes electorales que contienen la
-                                        documentación electoral utilizada en las casillas.</p>
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Registros correspondientes a la recepción de los paquetes electorales que contienen la documentación electoral utilizada en las casillas.</p>
                                     <div class="flex justify-end">
                                         <Link @click="getAECRecordsLog"
                                               class="inline-flex space-x-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-600 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -270,55 +271,74 @@ const logout = () => {
                                         </Link>
                                     </div>
                                 </div>
-                                <div
-                                    class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                     <div class="flex items-center space-x-4">
-                                        <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel"
-                                             width="60">
+                                        <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
                                         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                            Resultados Preliminares.</h5>
+                                            Resultados Preliminares.
+                                        </h5>
                                     </div>
-                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Resultados de los
-                                        Partidos
-                                        Políticos y Coaliciones Electorales en desglose por sección y casilla por el
-                                        Principio de Mayoría Relativa y Representación Proporcional.</p>
-
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Resultados de los Partidos Políticos y Coaliciones Electorales en desglose por sección y casilla por el Principio de Mayoría Relativa y Representación Proporcional.</p>
                                     <div class="flex justify-end">
-                                        <button id="dropdown" data-dropdown-toggle="dropdownPreliminaryResults"
-                                                class="text-purple-600 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                                type="button">
+                                        <button id="dropdown" data-dropdown-toggle="dropdownPreliminaryResults" class="text-purple-600 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                                             Descargar
-                                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                      stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                             </svg>
                                         </button>
 
                                         <!-- Dropdown menu -->
-                                        <div id="dropdownPreliminaryResults"
-                                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                                aria-labelledby="dropdownPreliminaryResults"
-                                                v-for="resource in preliminaryResults" :key="resource.id">
+                                        <div id="dropdownPreliminaryResults" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownPreliminaryResults" v-for="resource in preliminaryResults" :key="resource.id">
                                                 <li>
-                                                    <a :href="resource.url"
-                                                       class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex space-x-2 items-center">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                             stroke-width="2" stroke-linecap="round"
-                                                             stroke-linejoin="round"
-                                                             class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-xls">
+                                                    <a :href="resource.url" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex space-x-2 items-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-xls">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                                             <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
                                                             <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4"/>
                                                             <path d="M4 15l4 6"/>
                                                             <path d="M4 21l4 -6"/>
-                                                            <path
-                                                                d="M17 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75"/>
+                                                            <path d="M17 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75"/>
                                                             <path d="M11 15v6h3"/>
                                                         </svg>
                                                         <span>Distrito {{ resource.district }}</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full p-6 bg-white alerts-border rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                    <div class="flex items-center space-x-4">
+                                        <img src="../../images/icons/Files_15.svg" alt="Icono de archivo Excel" width="60">
+                                        <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                            Resultados Finales.
+                                        </h5>
+                                    </div>
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Resultado de los Cómputos Distritales desglosado por Sección y Casilla Electoral.</p>
+                                    <div class="flex justify-end">
+                                        <button id="dropdown" data-dropdown-toggle="dropdownFinalResults" class="text-purple-600 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                            Descargar
+                                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                            </svg>
+                                        </button>
+
+                                        <!-- Dropdown menu -->
+                                        <div id="dropdownFinalResults" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFinalResults" v-for="result in FinalResultsXLSXbyDistrict.links" :key="result.district">
+                                                <li>
+                                                    <a :href="result.url" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex space-x-2 items-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-xls">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                            <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                                                            <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4"/>
+                                                            <path d="M4 15l4 6"/>
+                                                            <path d="M4 21l4 -6"/>
+                                                            <path d="M17 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75"/>
+                                                            <path d="M11 15v6h3"/>
+                                                        </svg>
+                                                        <span>Distrito {{ result.district }}</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -333,3 +353,12 @@ const logout = () => {
         </div>
     </div>
 </template>
+<style>
+.alerts-border {
+    border: 3px #ffa600 solid;
+    animation: blink 1s;
+    animation-iteration-count: 3;
+}
+
+@keyframes blink { 50% { border-color:#fff ; }  }
+</style>

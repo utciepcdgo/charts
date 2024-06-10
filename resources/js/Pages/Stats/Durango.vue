@@ -108,18 +108,20 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
             <!--SECCION 2 - COMPUTOS ELECTORALES-->
             <h5 class="my-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Cómputos Electorales.</h5>
 
-            <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 justify-center gap-4 my-10">
-                <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 items-center gap-4 my-10">
+            <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 justify-center gap-4">
+                <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 items-center gap-4">
                     <GaugeChart :title="'Recuento'"
                                 :series="[recountPackets.series.expected - (recountPackets.series.received), recountPackets.series.received]"/>
                     <div class="w-full p-6 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex flex-col justify-start">
+                            <div class="mb-6">
 
-                            <div class="block mb-6 relative" v-for="district in recountPackets.series.by_district">
-                                <span class="absolute">Distrito {{ district.district }}:</span>
-                                <fwb-progress :progress="toFixed((district.progress / district.amount * 100), 2)" size="lg" label-position="outside" label-progress color="purple"/>
+                                <div class="block mb-3 relative" v-for="district in recountPackets.series.by_district">
+                                    <span class="absolute text-sm">Distrito {{ district.district }}: ({{ district.progress + ' de ' + district.amount }})</span>
+                                    <fwb-progress :progress="toFixed((district.progress / district.amount * 100), 2)" size="lg" label-position="outside" label-progress color="purple"/>
+                                </div>
+
                             </div>
-
                             <div class="flex space-x-3.5">
                                 <img src="../../../images/icons/Files_23.svg" alt="Icono de archivo Excel" width="60">
                                 <div class="flex flex-col">
