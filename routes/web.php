@@ -50,4 +50,5 @@ Route::prefix('export')->group(function () {
    Route::get('/aec-records', [App\Http\Controllers\Reports\AECRecordsController::class, '_getAECRegistrationCSV'])->name('export.aec');
    Route::get('/aec-collates-recounts', [App\Http\Controllers\Reports\CollateRecountPacketsListController::class, '_getAECCollateCSV']);
    Route::get('/warehouse-io', [App\Http\Controllers\Reports\WarehouseIOController::class, 'WarehouseIO'])->name('export.bodega-io');
+   Route::get('/representatives-parties', [App\Http\Controllers\Reports\WarehouseIOController::class, 'WarehouseIO'])->name('export.bodega-io');
 });

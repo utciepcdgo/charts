@@ -2,6 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import GaugeChart from "@/Components/Charts/GaugeChart.vue";
 import Files from '@/Functions/Files.js';
+import {FwbProgress} from 'flowbite-vue'
 import {Link} from '@inertiajs/vue3';
 </script>
 
@@ -15,6 +16,11 @@ interface Chart {
         received: number,
         expected: number,
         progress: number,
+        by_district: {
+            district: number,
+            amount: number,
+            progress: number,
+        }
     }
 }
 
@@ -53,6 +59,8 @@ export default {
         }
     },
 }
+
+const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
 
 </script>
 
@@ -104,27 +112,33 @@ export default {
                 <div class="grid md:grid-cols-2 sm:grid-cols-1 lg:md:grid-cols-2 items-center gap-4 my-10">
                     <GaugeChart :title="'Recuento'"
                                 :series="[recountPackets.series.expected - (recountPackets.series.received), recountPackets.series.received]"/>
-                    <div
-                        class="w-full p-6 dark:bg-gray-800 dark:border-gray-700">
-                        <div class="flex items-center space-x-4">
-                            <img src="../../../images/icons/Files_23.svg" alt="Icono de archivo Excel"
-                                 width="60">
-                            <div class="flex flex-col">
-                                <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                    Listado de Casillas en Recuento
-                                </h5>
-                                <Link @click.prevent="Files.getCollatedRecountPacketsList(2)" href="#"
-                                      class="inline-flex space-x-2 items-center text-sm font-medium text-center text-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-csv">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
-                                        <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4"/>
-                                        <path d="M7 16.5a1.5 1.5 0 0 0 -3 0v3a1.5 1.5 0 0 0 3 0"/>
-                                        <path d="M10 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75"/>
-                                        <path d="M16 15l2 6l2 -6"/>
-                                    </svg>
-                                    <span>Descargar</span>
-                                </Link>
+                    <div class="w-full p-6 dark:bg-gray-800 dark:border-gray-700">
+                        <div class="flex flex-col justify-start">
+
+                            <div class="block mb-6" v-for="district in recountPackets.series.by_district">
+                                Distrito {{ district.district }}:
+                                <fwb-progress :progress="toFixed((district.progress / district.amount * 100), 2)" size="lg" label-position="outside" label-progress color="purple"/>
+                            </div>
+
+                            <div class="flex space-x-3.5">
+                                <img src="../../../images/icons/Files_23.svg" alt="Icono de archivo Excel" width="60">
+                                <div class="flex flex-col">
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        Listado de Casillas en Recuento
+                                    </h5>
+                                    <Link @click.prevent="Files.getCollatedRecountPacketsList(2)" href="#"
+                                          class="inline-flex space-x-2 items-center text-sm font-medium text-center text-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-csv">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                                            <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4"/>
+                                            <path d="M7 16.5a1.5 1.5 0 0 0 -3 0v3a1.5 1.5 0 0 0 3 0"/>
+                                            <path d="M10 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75"/>
+                                            <path d="M16 15l2 6l2 -6"/>
+                                        </svg>
+                                        <span>Descargar</span>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>

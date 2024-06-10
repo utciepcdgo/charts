@@ -22,6 +22,7 @@
         "@tabler/icons-vue": "^3.5.0",
         "apexcharts": "^3.48.0",
         "flowbite": "^2.3.0",
+        "flowbite-vue": "^0.1.5",
         "laravel-echo": "^1.16.1",
         "pusher-js": "^8.4.0-rc2",
         "vue-loading-overlay": "6.0",

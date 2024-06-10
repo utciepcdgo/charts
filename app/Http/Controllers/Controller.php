@@ -142,6 +142,34 @@ class Controller extends BaseController
 
     public function _getRecountPackets(): jsonResponse
     {
+        if ($this->municipio == 5) {
+            $iterations = 6;
+            $by_district = array();
+            for ($i = 1; $i <= $iterations; $i++) {
+                $by_district[] = [
+                    "amount" => DB::Connection($this->database)->table('rc_actas AS ac')->select('ac.id')
+                        ->join('recepciones AS r', 'ac.recepcion_id', '=', 'r.id')
+                        ->join('paquetes AS p', 'r.paquete_id', '=', 'p.id')
+                        ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
+                        ->where('c.cat_distrito_id', $i)
+                        ->where('ac.recuento_cotejo', '=', 'r')
+                        ->where('p.eleccion_id', 3)
+                        ->get()->count(),
+                    "progress" => DB::Connection($this->database)->table('rc_actas AS ac')->select('ac.id')
+                        ->join('recepciones AS r', 'ac.recepcion_id', '=', 'r.id')
+                        ->join('paquetes AS p', 'r.paquete_id', '=', 'p.id')
+                        ->join('casillas AS c', 'c.id', '=', 'p.casilla_id')
+                        ->where('c.cat_distrito_id', $i)
+                        ->where('ac.recuento_cotejo', '=', 'r')
+                        ->where('p.eleccion_id', 3)
+                        ->where('ac.status', 1)
+                        ->where('ac.captura', 1)
+                        ->get()->count(),
+                    "district" => $i
+                ];
+            }
+        }
+
         $recount_x = DB::Connection($this->database)->table('rc_actas AS ac')->select('ac.id')
             ->join('recepciones AS r', 'ac.recepcion_id', '=', 'r.id')
             ->join('paquetes AS p', 'r.paquete_id', '=', 'p.id')
@@ -160,7 +188,7 @@ class Controller extends BaseController
             ->count();
 
         return response()->json(array("series" =>
-            array("received" => $recount_x, "expected" => $recount_y, "progress" => 72)
+            array("received" => $recount_x, "expected" => $recount_y, "progress" => 72, "by_district" => $by_district ?? 0)
         ));
     }
 

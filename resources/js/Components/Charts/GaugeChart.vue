@@ -63,7 +63,7 @@ export default defineComponent({
                 legend: {
                     show: false
                 },
-                colors: ['#CFD8DC', '#680bf8'],
+                colors: ['#EDE7F6', '#680bf8'],
                 title: {
                     text: this.title,
                     align: 'left',

@@ -20,7 +20,8 @@ export default {
                 municipio_id: usePage().props.municipio_id,
                 type_of_records: typeOfRecords
             },
-            responseType: 'blob'
+            responseType: 'text/csv',
+            responseEncoding: 'utf-8'
         }).then(response => {
             console.log(response);
             const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -43,7 +44,30 @@ export default {
             params: {
                 municipio_id: usePage().props.municipio_id,
             },
-            responseType: 'blob'
+            responseType: 'text/csv',
+            responseEncoding: 'UTF-8'
+        }).then(response => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            // Getting name from laravel's response header
+            const filename = response.headers.get("content-disposition").split("filename=")[1];
+
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+        }).then(() => {
+            loader.hide();
+        });
+    },
+    getPartiesRepresentats: function () {
+        const loader = $loading.show({});
+        axios.get('/export/representatives-parties/', {
+            params: {
+                municipio_id: usePage().props.municipio_id,
+            },
+            responseType: 'text/csv',
+            responseEncoding: 'utf-8'
         }).then(response => {
             console.log(response);
             const url = window.URL.createObjectURL(new Blob([response.data]));
